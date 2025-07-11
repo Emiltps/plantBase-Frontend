@@ -1,5 +1,6 @@
 import { NavContainer } from 'src/components/NavContainer';
 import { BottomTabNav } from '~/components/navigation/BottomTabNav';
+import { AuthStackNav } from 'src/components/navigation/AuthStackNav';
 import './global.css';
 
 const isLoggedIn = true;

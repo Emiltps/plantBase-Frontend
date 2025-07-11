@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+export default function BottomTabNav() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
