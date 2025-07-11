@@ -1,4 +1,4 @@
-import { NavContainer } from 'components/NavContainer';
+import { NavContainer } from '~/components/NavContainer';
 import './global.css';
 
 export default function App() {
