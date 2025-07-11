@@ -35,7 +35,7 @@ export default function BottomTabNavigator() {
             default:
               iconName = 'help';
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName as any} size={size} color={color} />;
         },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
