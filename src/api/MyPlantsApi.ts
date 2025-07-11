@@ -5,4 +5,6 @@ const api = axios.create({
   timeout: 9000,
 });
 
-export const getPlants = () => api.get('/plants');
+const getPlants = () => api.get('/plants');
+
+export default getPlants;

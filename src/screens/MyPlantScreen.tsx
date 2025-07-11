@@ -1,4 +1,11 @@
-import React from 'react';
-import { Text, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, Image, StyleSheet } from 'react-native';
+import getPlants from '../api/MyPlantsApi';
+import MyPlantCard from '../components/MyPlantCard';
 
-export const MyPlantScreen = () => {};
+export const MyPlantScreen = () => {
+  const [myPlants, setMyPlants] = useState([]);
+};
+useEffect(() => {
+  getPlants();
+}, []);
