@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView, Text, FlatList } from 'react-native';
 import { getAllPlants } from '../../../api/plants';
+import PlantPreviewCard from '../PlantPreviewCard';
 
 type Plant = {
   plant_id: number;
@@ -32,6 +33,19 @@ export default function HomeScreen() {
           You have {plants.length} plant{plants.length === 1 ? '' : 's'}
         </Text>
       </View>
+
+      <FlatList
+        data={plants}
+        keyExtractor={(item) => item.plant_id.toString()}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+        renderItem={({ item }) => (
+          <PlantPreviewCard
+            nickname={item.nickname}
+            profile_description={item.profile_description}
+            photo_url={item.photo_url}
+          />
+        )}
+      />
     </SafeAreaView>
   );
 }
