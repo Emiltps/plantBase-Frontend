@@ -25,7 +25,10 @@ export const NavContainer = ({ children }: Props) => {
   if (isSplashVisible) {
     return (
       <View className="flex-1 items-center justify-center bg-lime-50">
-        <Image source={require('../../assets/plantBase_logo_v2.png')} className="h-1/2 w-1/2" />
+        <Image
+          source={require('../../assets/plantBase_logo_v2-small.png')}
+          className="h-auto w-3/4 max-w-[300px] object-contain"
+        />
       </View>
     );
   }

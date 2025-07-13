@@ -1,9 +1,37 @@
-import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, SafeAreaView, Text, FlatList } from 'react-native';
+import { getAllPlants } from '../../../api/plants';
+
+type Plant = {
+  plant_id: number;
+  nickname: string;
+  profile_description: string;
+  photo_url: string;
+};
 
 export default function HomeScreen() {
+  const [plants, setPlants] = useState<Plant[]>([]);
+
+  useEffect(() => {
+    async function fetchPlants() {
+      try {
+        const data = await getAllPlants();
+        setPlants(data);
+      } catch (err) {
+        console.log('error fetching plants', err);
+      }
+    }
+    fetchPlants();
+  }, []);
+
   return (
-    <View className="flex-1 items-center justify-center bg-lime-50">
-      <Text className="text-3xl font-medium text-gray-500">Home Screen</Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-lime-50">
+      <View className="px-4 py-6">
+        <Text className="mb-2 text-xl font-semibold">Welcome back! 🌿</Text>
+        <Text className="text-md text-gray-600">
+          You have {plants.length} plant{plants.length === 1 ? '' : 's'}
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
