@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://superbase/api', //admend once hosted
+  baseURL: 'https://plantbase-be.onrender.com/', //admend once hosted
   timeout: 9000,
 });
 
-const getPlants = () => api.get('/plants');
+const getPlants = (userId: string) => api.get(`/api/${userId}/plants`);
 
 export default getPlants;
