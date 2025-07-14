@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
 export async function getAllPlants() {
-   return [
+  return [
     {
       plant_id: 1,
       nickname: 'Mock Fern',
@@ -63,13 +63,13 @@ export async function getAllPlants() {
       created_at: '2025-07-05T08:00:00.000Z',
       died_at: '2025-07-12T18:00:00.000Z',
       owner_id: 'mock-user-id',
-    }
-  ]
-    // const res = await axios.get(`${API_BASE_URL}/plants`)
-    // return res.data.plants
+    },
+  ];
+  // const res = await axios.get(`${API_BASE_URL}/plants`)
+  // return res.data.plants
 }
 
 export async function getNextDueForPlant(plantId: string) {
-    const res = await axios.get(`${API_BASE_URL}/plants/${plantId}/care_schedules/next_due`)
-    return res.data.nextDue
+  const res = await axios.get(`${API_BASE_URL}/plants/${plantId}/care_schedules/next_due`);
+  return res.data.nextDue;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
-import getPlants from '../../api/MyPlantsApi';
+import getPlants from '../../../api/MyPlantsApi';
 import MyPlantList from '../MyPlantList';
 import MyPlantAddPlantButton from '../MyPlantAddPlantButton';
 
