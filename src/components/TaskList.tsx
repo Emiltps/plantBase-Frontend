@@ -23,7 +23,7 @@ export default function TaskList({ plant_id }: TaskListProps) {
     const fetchSchedule = async () => {
       try {
         const response = await axios.get(
-          `https://plantbase-be.onrender.com/plants/${plant_id}/care_schedule`
+          `https://plantbase-be.onrender.com/plants/${plant_id}/care_schedules`
         );
         setSchedule(response.data);
       } catch (err: any) {

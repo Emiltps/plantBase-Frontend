@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
-import MyPlantsScreen from '../screens/MyPlantsScreen';
 import UpcomingTasksScreen from '../screens/UpcomingTasksScreen';
+import CalendarScreen from '../screens/CalendarScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -23,10 +23,10 @@ export default function BottomTabNav() {
             case 'Home':
               iconName = 'home-outline';
               break;
-            case 'Plants':
-              iconName = 'leaf-outline';
-              break;
             case 'Tasks':
+              iconName = 'bookmark-outline';
+              break;
+            case 'Calendar':
               iconName = 'calendar-outline';
               break;
             case 'Profile':
@@ -39,8 +39,8 @@ export default function BottomTabNav() {
         },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Plants" component={MyPlantsScreen} />
       <Tab.Screen name="Tasks" component={UpcomingTasksScreen} />
+      <Tab.Screen name="Calendar" component={CalendarScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
