@@ -73,3 +73,24 @@ export async function getNextDueForPlant(plantId: string) {
   const res = await axios.get(`${API_BASE_URL}/plants/${plantId}/care_schedules/next_due`);
   return res.data.nextDue;
 }
+
+
+export async function createPlant(
+  plant: {
+    plant_type_id: string
+    nickname: string
+    photo_url?: string
+    profile_description: string
+    notes: string
+    status?: string
+    died_at?: string | null
+  },
+  token: string
+) {
+  const res = await axios.post(`${API_BASE_URL}/plants`, plant, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return res.data.plant
+}
