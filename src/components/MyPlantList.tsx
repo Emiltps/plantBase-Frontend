@@ -6,7 +6,7 @@ interface MyPlantListProps {
   plants: any[];
 }
 
-const myPlantList: React.FunctionComponent<MyPlantListProps> = ({ plants }) => (
+const MyPlantList: React.FunctionComponent<MyPlantListProps> = ({ plants }) => (
   <FlatList
     data={plants}
     renderItem={({ item }) => <MyPlantCard plant={item} />}
@@ -14,4 +14,4 @@ const myPlantList: React.FunctionComponent<MyPlantListProps> = ({ plants }) => (
   />
 );
 
-export default myPlantList;
+export default MyPlantList;
