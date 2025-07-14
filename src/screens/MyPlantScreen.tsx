@@ -4,7 +4,7 @@ import getPlants from '../api/MyPlantsApi';
 import MyPlantList from '../components/MyPlantList';
 import MyPlantAddPlantButton from '../components/MyPlantAddPlantButton';
 
-export const MyPlantScreen = () => {
+const MyPlantScreen = () => {
   const [myPlants, setMyPlants] = useState([]);
   const fetchPlants = async () => {
     try {
@@ -31,3 +31,5 @@ export const MyPlantScreen = () => {
     </>
   );
 };
+
+export default MyPlantScreen;
