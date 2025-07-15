@@ -7,14 +7,15 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 import { getProfile } from '../../../api/ProfileApi';
 import { supabase } from '../../../api/supabaseClient';
+import Feather from '@expo/vector-icons/Feather';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
@@ -73,66 +74,70 @@ export default function ProfileScreen() {
   }
 
   return (
-    <KeyboardAvoidingView
+    <KeyboardAwareScrollView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
-      <SafeAreaView edges={['top']} className="flex-1 bg-white px-6 pt-4">
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-          <Text className="mb-8 mt-6 text-center text-3xl">Your Profile</Text>
-
-          <View className="mb-8 items-center">
+      contentContainerStyle={{ flexGrow: 1 }}
+      enableOnAndroid
+      enableAutomaticScroll
+      keyboardShouldPersistTaps="handled">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView edges={['top']} className="flex-1 bg-white px-6 pt-4">
+          <View className="mb-8 mt-4 items-center">
             <Image
               source={avatarUrl ? { uri: avatarUrl } : require('../../../assets/dummy_profile.png')}
               className="h-48 w-48 rounded-full"
             />
           </View>
 
-          <Text className="mb-1 text-sm text-gray-700">Full Name</Text>
+          <Text className="text-md mb-2 ml-3 text-gray-500">Full Name</Text>
           <TextInput
             value={fullName}
             onChangeText={setFullName}
             placeholder="Enter your full name"
-            className="mb-4 rounded-md border-2 border-gray-300 px-4 py-4 text-lg"
+            className="bg-bg mb-4 rounded-2xl px-6 py-6 text-xl"
           />
 
           {/* Username */}
-          <Text className="mb-1 text-sm text-gray-700">Username</Text>
+          <Text className="text-md mb-2 ml-3 text-gray-500">Username</Text>
           <TextInput
             value={username}
             editable={false}
             placeholder="Choose a username"
-            className="mb-4 rounded-md border-2 border-gray-300 bg-gray-100 px-4 py-4 text-lg"
+            className="mb-4 rounded-2xl bg-gray-200 px-6 py-6 text-xl"
           />
 
-          <Text className="mb-1 text-sm text-gray-700">Email Address</Text>
+          <Text className="text-md mb-2 ml-3 text-gray-500">Email Address</Text>
           <TextInput
             value={email}
             onChangeText={setEmail}
             placeholder="Enter your email"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="mb-4 rounded-md border-2 border-gray-300 px-4 py-4 text-lg"
+            className="bg-bg mb-4 rounded-2xl px-6 py-6 text-xl"
           />
 
           <TouchableOpacity
             onPress={handleSave}
             disabled={loading}
-            className="mb-4 items-center rounded-md bg-green-500 py-4">
+            className="bg-primary mb-6 flex-row items-center items-center justify-center rounded-2xl py-6">
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text className="font-large text-lg font-bold text-white">Save</Text>
+              <>
+                <Feather name="save" size={24} color="white" />
+                <Text className="font-large ml-2 text-xl font-bold text-white">Save</Text>
+              </>
             )}
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => signOut()}
-            className="items-center rounded-md border border-red-500 bg-red-600 py-4">
-            <Text className="font-large text-lg font-bold text-white">Log Out</Text>
+            className="bg-red-light flex-row items-center justify-center rounded-2xl px-4 py-4 py-6">
+            <Feather name="log-out" size={24} color="#b01d3e" />
+            <Text className="text-red-main ml-2 text-lg font-bold">Log Out</Text>
           </TouchableOpacity>
-        </ScrollView>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }
