@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, SafeAreaView, Text, FlatList } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAllPlants } from '../../../api/plants';
 import PlantPreviewCard from '../PlantPreviewCard';
 
