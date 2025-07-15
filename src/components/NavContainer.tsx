@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const NavContainer = ({ children }: Props) => {
+const NavContainer = ({ children }: Props) => {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
 
   useEffect(() => {
@@ -34,3 +34,5 @@ export const NavContainer = ({ children }: Props) => {
   }
   return <NavigationContainer>{children}</NavigationContainer>;
 };
+
+export default NavContainer;
