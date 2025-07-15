@@ -50,10 +50,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingHorizontal: 16 }}
         renderItem={({ item }) => (
           <PlantPreviewCard
-          plant_id={item.plant_id}
-            nickname={item.nickname}
-            profile_description={item.profile_description}
-            photo_url={item.photo_url}
+plant={item} 
           />
         )}
       />
