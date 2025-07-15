@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootPlantId = {
+  Plant: { plantId: string };
+};
 
 interface MyPlantCardProps {
   plant: {
@@ -16,14 +22,20 @@ interface MyPlantCardProps {
 }
 
 const MyPlantCard: React.FunctionComponent<MyPlantCardProps> = ({ plant }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootPlantId>>();
+
+  const handlePress = () => {
+    navigation.navigate('Plant', { plantId: plant.id });
+  };
+
   return (
-    <View className="flex-1 justify-center rounded-xl bg-lime-50 p-4">
+    <Pressable onPress={handlePress} className="flex-1 rounded-xl bg-lime-50 p-4">
       <Text className="text-lg font-bold">{plant.nickname}</Text>
       {plant.profile_description && (
         <Text className="text-sm text-gray-600">{plant.profile_description}</Text>
       )}
       <Text className="text-xs">Status: {plant.status}</Text>
-    </View>
+    </Pressable>
   );
 };
 
