@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, SafeAreaView } from 'react-native';
+import { Text, ActivityIndicator, SafeAreaView } from 'react-native';
 import axios from 'axios';
 import TaskViewSwitcher from '../TaskViewSwitcher';
 import UpcomingTaskList from '../UpcomingTaskList';
@@ -36,7 +36,7 @@ export default function UpcomingTasksScreen() {
 
         const [tasksRes, plantsRes] = await Promise.all([
           axios.get<CareSchedule[]>(`https://plantbase-be.onrender.com/users/${userId}/care_tasks`),
-          axios.get<Plant[]>(`https://plantbase-be.onrender.com/user/${userId}/plants`),
+          axios.get<Plant[]>(`https://plantbase-be.onrender.com/users/${userId}/plants`),
         ]);
 
         setAllTasks(tasksRes.data);
@@ -54,7 +54,7 @@ export default function UpcomingTasksScreen() {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const now = new Date();
@@ -88,7 +88,8 @@ export default function UpcomingTasksScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 items-center bg-white">
+      <Text className="py-3 text-2xl font-bold text-lime-800">Upcoming Tasks</Text>
       <TaskViewSwitcher selected={view} onSelect={setView} />
       <UpcomingTaskList tasks={filteredTasks} plantsMap={plantsMap} />
     </SafeAreaView>
