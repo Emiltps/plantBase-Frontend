@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, SafeAreaView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator, SafeAreaView } from 'react-native';
 import axios from 'axios';
 import TaskViewSwitcher from '../TaskViewSwitcher';
 import UpcomingTaskList from '../UpcomingTaskList';
 import { startOfToday, endOfToday, endOfWeek, isWithinInterval, parseISO } from 'date-fns';
+import { useAuth } from '../../contexts/AuthContext';
 
 type CareSchedule = {
   plant_id: number;
@@ -20,6 +20,7 @@ type Plant = {
 };
 
 export default function UpcomingTasksScreen() {
+  const { user, signOut } = useAuth();
   const [allTasks, setAllTasks] = useState<CareSchedule[]>([]);
   const [plantsMap, setPlantsMap] = useState<Record<number, string>>({});
   const [filteredTasks, setFilteredTasks] = useState<CareSchedule[]>([]);
@@ -28,10 +29,10 @@ export default function UpcomingTasksScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user) return;
       try {
-        const storedUserId = await AsyncStorage.getItem('user_id');
-        if (!storedUserId) throw new Error('User ID not found');
-        const userId = parseInt(storedUserId);
+        const userId = user.id;
+        if (!userId) throw new Error('User ID not found');
 
         const [tasksRes, plantsRes] = await Promise.all([
           axios.get<CareSchedule[]>(`https://plantbase-be.onrender.com/users/${userId}/care_tasks`),
