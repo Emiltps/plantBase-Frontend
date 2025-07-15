@@ -5,6 +5,8 @@ import TaskViewSwitcher from '../TaskViewSwitcher';
 import UpcomingTaskList from '../UpcomingTaskList';
 import { startOfToday, endOfToday, endOfWeek, isWithinInterval, parseISO } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
+import { getCareTasks } from '../../../api/tasks';
+import { getAllPlants } from '../../../api/plants';
 
 type CareSchedule = {
   plant_id: number;
@@ -12,11 +14,6 @@ type CareSchedule = {
   interval_days: number;
   next_due: string;
   created_at: string;
-};
-
-type Plant = {
-  plant_id: number;
-  nickname: string;
 };
 
 export default function UpcomingTasksScreen() {
@@ -34,15 +31,12 @@ export default function UpcomingTasksScreen() {
         const userId = user.id;
         if (!userId) throw new Error('User ID not found');
 
-        const [tasksRes, plantsRes] = await Promise.all([
-          axios.get<CareSchedule[]>(`https://plantbase-be.onrender.com/users/${userId}/care_tasks`),
-          axios.get<Plant[]>(`https://plantbase-be.onrender.com/users/${userId}/plants`),
-        ]);
+        const [tasksRes, plantsRes] = await Promise.all([getCareTasks(userId), getAllPlants()]);
 
-        setAllTasks(tasksRes.data);
+        setAllTasks(tasksRes);
 
         const plantMap: Record<number, string> = {};
-        plantsRes.data.forEach((plant) => {
+        plantsRes.forEach((plant) => {
           plantMap[plant.plant_id] = plant.nickname;
         });
         setPlantsMap(plantMap);
