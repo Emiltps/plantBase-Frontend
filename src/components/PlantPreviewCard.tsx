@@ -9,7 +9,15 @@
     nickname: string;
     profile_description: string;
     photo_url?: string;
+    owner_id: string;
+    plant_type_id: string;
+    profile_description?: string;
+    notes?: string;
+    status: string;
+    created_at: string;
+    died_at: string | null;
   };
+  
 
   type RootStackParamList = {
     PlantDetailScreen: { plant: PlantType };
