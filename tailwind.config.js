@@ -12,6 +12,8 @@ module.exports = {
         'text-main': '#0f1712',
         'green-bg': '#0f1712',
         'light-green-bg': '#e9f4ee',
+        'red-light': '#ffe8e9',
+        'red-main': '#b01d3e',
       },
     },
   },
