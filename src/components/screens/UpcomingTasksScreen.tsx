@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import TaskViewSwitcher from '../TaskViewSwitcher';
@@ -80,16 +80,16 @@ export default function UpcomingTasksScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#4CAF50" />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       <TaskViewSwitcher selected={view} onSelect={setView} />
       <UpcomingTaskList tasks={filteredTasks} plantsMap={plantsMap} />
-    </View>
+    </SafeAreaView>
   );
 }
