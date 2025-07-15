@@ -76,6 +76,7 @@ export async function getNextDueForPlant(plantId: string) {
 
 
 export async function createPlant(
+  userId: string,
   plant: {
     plant_type_id: string
     nickname: string
@@ -87,7 +88,7 @@ export async function createPlant(
   },
   token: string
 ) {
-  const res = await axios.post(`${API_BASE_URL}/plants`, plant, {
+  const res = await axios.post(`${API_BASE_URL}/users/${userId}/plants`, plant, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
