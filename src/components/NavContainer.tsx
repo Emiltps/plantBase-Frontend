@@ -1,38 +1,43 @@
-import React, { use } from 'react';
-import { useState, useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, ImageBackground, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 
 type Props = {
   children: React.ReactNode;
 };
 
-const NavContainer = ({ children }: Props) => {
+export default function NavContainer({ children }: Props) {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsSplashVisible(false);
     }, 2000);
-
-    const clearSplashTimer = () => {
-      clearTimeout(timer);
-    };
-
-    return clearSplashTimer;
+    return () => clearTimeout(timer);
   }, []);
 
   if (isSplashVisible) {
     return (
-      <View className="flex-1 items-center justify-center bg-lime-50">
-        <Image
-          source={require('../../assets/plantBase_logo_v2-small.png')}
-          className="h-auto w-3/4 max-w-[300px] object-contain"
-        />
-      </View>
+      <ImageBackground source={require('../../assets/bg.jpg')} style={styles.background}>
+        <SafeAreaView className="flex-1 items-center justify-center">
+          <Image
+            source={require('../../assets/logo-circle-zero.png')}
+            className="mb-12 h-64 w-64 rounded-full border-[10px] border-white"
+            resizeMode="contain"
+          />
+        </SafeAreaView>
+      </ImageBackground>
     );
   }
-  return <NavigationContainer>{children}</NavigationContainer>;
-};
 
-export default NavContainer;
+  return <NavigationContainer>{children}</NavigationContainer>;
+}
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
