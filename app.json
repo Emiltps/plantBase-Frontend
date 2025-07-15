@@ -5,7 +5,7 @@
     "version": "1.0.0",
 
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/logo-full.png",
       "bundler": "metro"
     },
 
@@ -16,12 +16,12 @@
     "plugins": [],
 
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-full.png",
 
     "userInterfaceStyle": "light",
 
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/bg.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -31,7 +31,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo-full.png",
         "backgroundColor": "#ffffff"
       }
     }
