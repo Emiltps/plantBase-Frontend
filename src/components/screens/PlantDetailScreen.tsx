@@ -1,8 +1,31 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute, RouteProp } from '@react-navigation/native';
 import PlantInfoSection from '../PlantInfoSection';
 import PlantImageDisplay from '../PlantImageDisplay'
+
+type PlantType = {
+  id?: string;               // optional if your data might not have it
+  owner_id: string;
+  plant_type_id: number;
+  nickname: string;
+  photo_url: string;
+  profile_description: string;
+  notes?: string;
+  status: string;
+  created_at: string;
+  died_at?: string | null;
+};
+
+type RootStackParamList = {
+  PlantDetailScreen: { plant: PlantType };
+  EditPlant: { plant: PlantType };
+  EditSchedule: { plantId?: string };
+  UpcomingTasks: { plantId?: string };
+};
+
+type PlantDetailScreenRouteProp = RouteProp<RootStackParamList, 'PlantDetailScreen'>;
+
 
 const mockPlant = 
   {
@@ -19,7 +42,10 @@ const mockPlant =
 
 const PlantDetailScreen = () => {
   const navigation = useNavigation();
-  const  plant  = mockPlant//route.params;
+  const route = useRoute<PlantDetailScreenRouteProp>();
+
+const plant = route.params?.plant ?? mockPlant;
+
 
   return (
     <ScrollView className="flex-1 bg-white">
