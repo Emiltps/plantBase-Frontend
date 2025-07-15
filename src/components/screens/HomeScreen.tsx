@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAllPlants } from '../../../api/plants';
 import PlantPreviewCard from '../PlantPreviewCard';
+import { useNavigation } from '@react-navigation/native';
 
 type Plant = {
   plant_id: number;
@@ -13,6 +14,8 @@ type Plant = {
 
 export default function HomeScreen() {
   const [plants, setPlants] = useState<Plant[]>([]);
+
+  const navigation = useNavigation() as any;
 
   useEffect(() => {
     async function fetchPlants() {
@@ -34,6 +37,12 @@ export default function HomeScreen() {
           You have {plants.length} plant{plants.length === 1 ? '' : 's'}
         </Text>
       </View>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('AddPlant')}
+        className="mb-5 mr-4 self-end rounded bg-lime-200 px-4 py-2">
+        <Text className="text-lg font-semibold text-green-800">＋ Add</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={plants}
