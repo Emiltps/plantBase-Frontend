@@ -15,6 +15,26 @@ export default function BottomTabNav() {
         headerShown: false,
         tabBarActiveTintColor: '#4CAF50',
         tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 16,
+          marginHorizontal: 16,
+          marginBottom: 8,
+          backgroundColor: '#ffffff',
+          borderWidth: 2,
+          borderColor: 'gray',
+          shadowColor: 'transparent',
+          shadowOpacity: 0,
+          shadowOffset: { width: 0, height: 0 },
+          borderTopWidth: 2,
+          borderRadius: 16,
+          height: 72,
+          paddingTop: 8,
+        },
+        tabBarItemStyle: {
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
 
         tabBarIcon: ({ color, size }) => {
           let iconName;
