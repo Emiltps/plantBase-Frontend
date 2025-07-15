@@ -11,7 +11,7 @@ const PlantInfoSection = ({ plant }) => {
         <Text className="text-sm text-gray-600">Description:{ plant.profile_description}</Text>
       )}
             {plant.notes && (
-        <Text className="text-sm text-gray-600">"Notes:"{ plant.notes}</Text>
+        <Text className="text-sm text-gray-600">Notes:{ plant.notes}</Text>
       )}
     </View>
   );
