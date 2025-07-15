@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import PlantInfoSection from '../PlantInfoSection';
+import PlantImageDisplay from '../PlantImageDisplay'
 
 const PlantDetailScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -9,6 +10,7 @@ const PlantDetailScreen = ({ route }) => {
 
   return (
     <ScrollView className="flex-1 bg-white">
+         <PlantImageDisplay imageUrl={plant.imageUrl} />
 
       <View className="px-4 py-6">
         <PlantInfoSection plant={plant} />
