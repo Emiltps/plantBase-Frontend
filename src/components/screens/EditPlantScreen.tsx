@@ -1,3 +1,6 @@
+import { View, Image, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
@@ -5,7 +8,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { updatePlant, getPlant } from '../../../api/MyPlantsApi';
 import type { Plant } from '../../../api/MyPlantsApi';
 import PlantTextInput from '../PlantForm/PlantTextInput';
-import PlantStatusDropdown from '../PlantForm/PlantStatusDropdown';
 import PrimaryButton from '../PlantForm/PrimaryButton';
 
 type RootStackParamList = {
@@ -26,6 +28,9 @@ export default function EditPlantScreen() {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const [description, setDescription] = useState(plant?.profile_description || '');
+  const [imageUri, setImageUri] = useState<string | undefined>(plant?.photo_url);
+
   const fetchPlantDetail = useCallback(async () => {
     try {
       setLoading(true);
@@ -34,6 +39,8 @@ export default function EditPlantScreen() {
       setNickname(data.nickname);
       setNotes(data.notes || '');
       setStatus(data.status.toUpperCase());
+      setDescription(data.profile_description);
+      setImageUri(data.photo_url);
     } catch {
       Alert.alert('Error', 'Could not load plant for editing');
       navigation.goBack();
@@ -67,13 +74,33 @@ export default function EditPlantScreen() {
       return;
     }
     try {
-      await updatePlant(String(plant!.plant_id), { nickname, notes, status: statusLower });
+      await updatePlant(String(plant!.plant_id), {
+        nickname,
+        notes,
+        status: statusLower,
+        profile_description: description,
+        photo_url: imageUri,
+      });
       Alert.alert('Success', 'Plant updated successfully.');
       navigation.goBack();
     } catch (error: any) {
       const msg = 'Failed to update plant';
       Alert.alert('Error', msg);
     }
+  };
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageUri(undefined);
   };
 
   return (
@@ -89,9 +116,76 @@ export default function EditPlantScreen() {
         multiline
         numberOfLines={4}
       />
+      <PlantTextInput
+        label="Description"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
+      />
+      <View className="mb-4 flex-row">
+        {/* Alive */}
+        <TouchableOpacity
+          onPress={() => setStatus('ALIVE')}
+          className={`mr-2 flex-1 items-center rounded-2xl py-6 ${
+            status === 'ALIVE' ? 'bg-green-bg' : 'bg-gray-200'
+          }`}>
+          <Text
+            className={`text-xl ${status === 'ALIVE' ? 'font-medium text-primary' : 'text-text-main'}`}>
+            Alive
+          </Text>
+        </TouchableOpacity>
+        {/* Infected */}
+        <TouchableOpacity
+          onPress={() => setStatus('INFECTED')}
+          className={`mr-2 flex-1 items-center rounded-2xl py-6 ${
+            status === 'INFECTED' ? 'bg-orange-200' : 'bg-gray-200'
+          }`}>
+          <Text
+            className={`text-xl ${status === 'INFECTED' ? 'font-medium text-orange-900' : 'text-text-main'}`}>
+            Infected
+          </Text>
+        </TouchableOpacity>
+        {/* Dead */}
+        <TouchableOpacity
+          onPress={() => setStatus('DEAD')}
+          className={`flex-1 items-center rounded-2xl py-6 ${
+            status === 'DEAD' ? 'bg-black' : 'bg-gray-200'
+          }`}>
+          <Text
+            className={`text-xl ${status === 'DEAD' ? 'font-medium text-white' : 'text-text-main'}`}>
+            Dead
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-      <Text className="mb-2 font-medium">Status</Text>
-      <PlantStatusDropdown selectedStatus={status} onStatusSelect={setStatus} />
+      {/* Description */}
+
+      {/* Image Preview & Controls */}
+      <View className="mb-4">
+        {imageUri ? (
+          <Image
+            source={{ uri: imageUri }}
+            className="aspect-square w-full rounded-2xl border border-8 border-green-bg bg-gray-200"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="h-40 w-full rounded-2xl bg-gray-200" />
+        )}
+        <View className="mt-2 flex-row">
+          <TouchableOpacity
+            onPress={handlePickImage}
+            className="flex-1 flex-row items-center justify-center rounded-2xl bg-gray-100 px-6 py-6">
+            <FontAwesome6 name="image" size={20} color="gray" />
+            <Text className="ml-3 text-xl text-gray-600">Change Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleRemoveImage}
+            className="ml-2 items-center justify-center rounded-2xl bg-red-light px-8 py-6">
+            <FontAwesome6 name="trash" size={20} color="#b01d3e" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <PrimaryButton label="Save" onPress={handleSave} />
     </ScrollView>
