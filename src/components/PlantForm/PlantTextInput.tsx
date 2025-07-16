@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, Text, View, TextInputProps } from 'react-native';
 
 type Props = TextInputProps & {
@@ -13,6 +13,10 @@ export default function PlantTextInput({
   numberOfLines,
   ...textInputProps
 }: Props) {
+  // Dynamic height for multiline input
+  const [inputHeight, setInputHeight] = useState(
+    multiline && numberOfLines ? numberOfLines * 24 : 0
+  );
   return (
     <View>
       <TextInput
@@ -21,7 +25,17 @@ export default function PlantTextInput({
         multiline={multiline}
         numberOfLines={numberOfLines}
         textAlignVertical="top"
-        style={multiline && numberOfLines ? { height: numberOfLines * 24 } : undefined}
+        onContentSizeChange={(event) => {
+          if (multiline) {
+            setInputHeight(event.nativeEvent.contentSize.height);
+          }
+        }}
+        style={[
+          multiline
+            ? { height: Math.max(inputHeight, numberOfLines ? numberOfLines * 24 : 0) }
+            : {},
+          textInputProps.style,
+        ]}
         {...textInputProps}
       />
     </View>
