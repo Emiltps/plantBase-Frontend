@@ -8,8 +8,10 @@ type PrimaryButtonProps = {
 
 export default function PrimaryButton({ label, onPress }: PrimaryButtonProps) {
   return (
-    <TouchableOpacity onPress={onPress} className="mt-2 items-center rounded-lg bg-green-500 py-3">
-      <Text className="text-lg font-semibold">{label}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      className="mb-6 flex-row items-center items-center justify-center rounded-2xl bg-primary py-6">
+      <Text className="font-large text-xl font-bold text-white">{label}</Text>
     </TouchableOpacity>
   );
 }

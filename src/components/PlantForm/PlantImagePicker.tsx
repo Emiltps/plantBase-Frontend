@@ -23,11 +23,11 @@ export default function PlantImagePicker({ imageUri, setImageUri }: Props) {
     <View className="mb-4">
       <TouchableOpacity
         onPress={pickImage}
-        className="items-center rounded border border-dashed border-gray-400 p-4">
+        className="items-center rounded-2xl border border-dashed border-gray-400 p-6">
         {imageUri ? (
-          <Image source={{ uri: imageUri }} className="h-24 w-24 rounded" />
+          <Image source={{ uri: imageUri }} className="aspect-square w-full rounded" />
         ) : (
-          <Text>Add Image</Text>
+          <Text className="text-lg">Add Image</Text>
         )}
       </TouchableOpacity>
     </View>
