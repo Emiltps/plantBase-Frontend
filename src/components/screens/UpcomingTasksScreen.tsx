@@ -48,8 +48,8 @@ export default function UpcomingTasksScreen() {
         const userId = user.id;
         const headers = await getAuthHeaders();
 
-        const tasksRes = await api.get(`/users/${userId}/care_tasks`, { headers });
-        const tasks: CareTask[] = tasksRes.data?.tasks ?? [];
+        const tasksRes = await api.get(`/api/users/${userId}/care_tasks`, { headers });
+        const tasks: CareTask[] = tasksRes.data.tasks;
 
         setAllTasks(tasks);
       } catch (error) {
