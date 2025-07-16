@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import PlantInfoSection from '../PlantInfoSection';
-import PlantImageDisplay from '../PlantImageDisplay';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { Image } from 'react-native';
+import { capitalizeWord } from '~/utils/utils';
 
 type PlantType = {
   id?: string;
@@ -47,31 +48,84 @@ const PlantDetailScreen = () => {
   const plant = route.params?.plant ?? mockPlant;
 
   return (
-    <ScrollView className="flex-1 bg-lime-50">
-      <PlantImageDisplay photo_url={plant.photo_url} />
+    <ScrollView className="flex-1 bg-white" contentContainerStyle={{ paddingBottom: 100 }}>
+      {/* Image and Info */}
+      <View className="mx-4 flex-row rounded-3xl bg-green-bg p-2">
+        {/* Image */}
+        <View className="relative" style={{ flex: 6.5 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EditPlant', { plant })}
+            className="mb-2 w-full flex-row items-center justify-center rounded-2xl bg-white px-3 py-4">
+            <FontAwesome6 name="edit" size={20} color="#4b8457" />
+            <Text className="ml-2 text-lg font-semibold text-primary">Edit</Text>
+          </TouchableOpacity>
+          <Image
+            source={{ uri: plant.photo_url }}
+            className="content-contain h-64 w-full rounded-2xl bg-gray-200"
+            resizeMode="cover"
+          />
+        </View>
+        {/* Stats */}
 
-      <View className="px-4 py-6">
-        <PlantInfoSection plant={plant} />
+        <View
+          className="ml-2 flex justify-center gap-6 rounded-2xl bg-light-green-bg p-6"
+          style={{ flex: 3.5 }}>
+          {/* Status */}
+          <View>
+            <Text className="text-sm font-semibold text-gray-400">Status</Text>
+            <Text className="mt-1 text-xl font-bold text-text-green">
+              {capitalizeWord(plant.status)}
+            </Text>
+          </View>
+          {/* Created At */}
+          <View>
+            <Text className="text-sm font-semibold text-gray-400">Created At</Text>
+            <Text className="mt-1 text-xl font-bold text-text-green">
+              {new Date(plant.created_at).toLocaleDateString(undefined, {
+                day: 'numeric',
+                month: 'short',
+                year: '2-digit',
+              })}
+            </Text>
+          </View>
+          {/* Type */}
+          <View>
+            {' '}
+            <Text className="text-sm font-semibold text-gray-400">Type</Text>
+            <Text className="mt-1 text-xl font-bold text-text-green">{plant.nickname}</Text>
+          </View>
+        </View>
+      </View>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate('EditPlant', { plant })}
-          className="mb-4 rounded-lg bg-green-600 py-3">
-          <Text className="text-center text-base font-semibold text-white">Edit Plant</Text>
-        </TouchableOpacity>
-
+      {/* View Care Schedule */}
+      <View className="mt-6 flex-row px-4">
         <TouchableOpacity
           onPress={() => navigation.navigate('EditScheduleScreen', { plantId: plant.id })}
-          className="mb-4 rounded-lg bg-emerald-500 py-3">
-          <Text className="text-center text-base font-semibold text-white">
-            Add / Edit Schedule
-          </Text>
+          className="mr-2 aspect-square h-[64px] items-center justify-center rounded-2xl bg-primary">
+          <FontAwesome6 name="add" size={24} color="#ffffff" />{' '}
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => navigation.navigate('UpcomingTasksScreen', { plantId: plant.id })}
-          className="rounded-lg bg-lime-500 py-3">
-          <Text className="text-center text-base font-semibold text-white">Upcoming Tasks</Text>
+          className="flex-1 items-center justify-center rounded-2xl bg-primary py-5">
+          <Text className="text-lg font-semibold text-white">View Care Schedule</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* Details Section */}
+      <View className="mt-4 rounded-t-3xl bg-white px-4 pb-8 pt-6">
+        <Text className="mb-5 text-center text-2xl font-semibold text-text-main">
+          {plant.nickname}
+        </Text>
+        {/* Description */}
+        <Text className="text-center text-lg text-gray-500">Description</Text>
+        <View className="mb-4 mt-3 rounded-3xl bg-light-green-bg p-6">
+          <Text className="text-xl text-text-main">{plant.profile_description}</Text>
+        </View>
+        {/* Notes */}
+        <Text className="text-center text-lg text-gray-500">Notes</Text>
+        <View className="mb-4 mt-3 rounded-3xl bg-light-green-bg p-6">
+          <Text className="text-xl text-text-main">{plant.notes || 'No notes available.'}</Text>
+        </View>
       </View>
     </ScrollView>
   );
