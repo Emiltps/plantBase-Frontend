@@ -8,6 +8,7 @@ import { supabase } from '../../../api/supabaseClient';
 import { format } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import { useRoute, useIsFocused } from '@react-navigation/native';
 
 type Plant = {
   plant_id: number;
@@ -15,7 +16,7 @@ type Plant = {
   profile_description: string;
   photo_url?: string;
   owner_id: string;
-  plant_type_id: string;
+  plant_type_id: number;
   notes?: string;
   status: string;
   created_at: string;
@@ -27,6 +28,9 @@ export default function HomeScreen() {
 
   const { user } = useAuth();
   const navigation = useNavigation() as any;
+  const route = useRoute() as any;
+  const isFocused = useIsFocused();
+
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || 'there';
   const todayFormatted = format(new Date(), "'Today is' EEEE, do 'of' MMMM");
 
@@ -50,6 +54,14 @@ export default function HomeScreen() {
     }
     fetchPlants();
   }, []);
+
+  useEffect(() => {
+    const newPlant = (route as any).params?.newPlant;
+    if (newPlant) {
+      setPlants((prev) => [newPlant, ...prev]);
+      (route as any).params.newPlant = null;
+    }
+  }, [route, isFocused]);
 
   return (
     <SafeAreaView className="flex-1 bg-bg">

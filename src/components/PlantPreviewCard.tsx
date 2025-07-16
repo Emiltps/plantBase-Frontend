@@ -10,7 +10,7 @@ type PlantType = {
   profile_description: string;
   photo_url?: string;
   owner_id: string;
-  plant_type_id: string;
+  plant_type_id: number;
   notes?: string;
   status: string;
   created_at: string;

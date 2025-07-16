@@ -4,12 +4,14 @@ import PlantTextInput from '../PlantForm/PlantTextInput';
 import PlantTypeDropdown from '../PlantForm/PlantTypeDropdown';
 import PlantImagePicker from '../PlantForm/PlantImagePicker';
 import PrimaryButton from '../PlantForm/PrimaryButton';
-import { createPlant } from '../../../api/plants';
-
-const token = 'bearer-token';
-const userId = 'user-id';
+import { useAuth } from '../../contexts/AuthContext';
+import { createPlant } from '../../../api/MyPlantsApi';
+import { useNavigation } from '@react-navigation/native';
 
 export default function AddPlantScreen() {
+  const { user } = useAuth();
+  const navigation = useNavigation() as any;
+
   const [nickname, setNickname] = useState('');
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
@@ -17,27 +19,27 @@ export default function AddPlantScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
 
   const handleSubmit = async () => {
-    if (!nickname || !plantTypeId) {
-      Alert.alert('Please enter a name and select a plant type');
+    const plantTypeIdNumber = parseInt(plantTypeId, 10);
+    if (!nickname || !plantTypeId || isNaN(plantTypeIdNumber)) {
+      Alert.alert('Please enter a name and select a valid plant type');
       return;
     }
 
+    const plantData = {
+      nickname,
+      plant_type_id: plantTypeIdNumber,
+      profile_description: description,
+      notes,
+      photo_url: imageUri ?? '',
+      status: 'alive',
+      died_at: null,
+    };
+
     try {
-      const newPlant = await createPlant(
-        userId,
-        {
-          nickname,
-          plant_type_id: plantTypeId,
-          profile_description: description,
-          notes,
-          photo_url: imageUri ?? '',
-          status: 'ALIVE',
-          died_at: null,
-        },
-        token
-      );
+      const newPlant = await createPlant(plantData);
       Alert.alert('Success', `Plant ${newPlant.nickname} added!`);
-    } catch (err) {
+      navigation.navigate('HomeMain', { newPlant });
+    } catch (err: any) {
       Alert.alert('Error', 'Failed to create plant');
     }
   };
