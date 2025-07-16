@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { Text, ScrollView, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { updatePlant } from '../../../api/MyPlantsApi';
-import PlantStatusDropdown from '../PlantStatusDropdown';
+import PlantTextInput from '../PlantForm/PlantTextInput';
+import PlantStatusDropdown from '../PlantForm/PlantStatusDropdown';
+import PrimaryButton from '../PlantForm/PrimaryButton';
 
 type RootStackParamList = {
   EditPlant: { plant: Plant };
@@ -45,30 +47,23 @@ export default function EditPlantScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
+    <ScrollView className="flex-1 bg-white p-4" contentContainerStyle={{ paddingBottom: 132 }}>
       <Text className="mb-4 text-2xl font-bold">Edit Plant</Text>
 
-      <Text className="mb-2 font-medium">Nickname</Text>
-      <TextInput
-        className="mb-4 rounded border border-gray-300 p-2"
-        value={nickname}
-        onChangeText={setNickname}
-      />
+      <PlantTextInput label="Nickname" value={nickname} onChangeText={setNickname} />
 
-      <Text className="mb-2 font-medium">Notes</Text>
-      <TextInput
-        className="mb-4 rounded border border-gray-300 p-2"
+      <PlantTextInput
+        label="Notes"
         value={notes}
         onChangeText={setNotes}
         multiline
+        numberOfLines={4}
       />
 
       <Text className="mb-2 font-medium">Status</Text>
       <PlantStatusDropdown selectedStatus={status} onStatusSelect={setStatus} />
 
-      <TouchableOpacity onPress={handleSave} className="mt-6 rounded-lg bg-green-600 py-3">
-        <Text className="text-center text-base font-semibold text-white">Save</Text>
-      </TouchableOpacity>
+      <PrimaryButton label="Save" onPress={handleSave} />
     </ScrollView>
   );
 }
