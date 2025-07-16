@@ -4,12 +4,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAllPlants } from '../../../api/plants';
 import PlantPreviewCard from '../PlantPreviewCard';
 import { useNavigation } from '@react-navigation/native';
+import getUserPlants from '../../../api/MyPlantsApi';
+import { supabase } from '../../../api/supabaseClient';
 
 type Plant = {
   plant_id: number;
   nickname: string;
   profile_description: string;
-  photo_url: string;
+  photo_url?: string;
+  owner_id: string;
+  plant_type_id: string;
+  notes?: string;
+  status: string;
+  created_at: string;
+  died_at: string | null;
 };
 
 export default function HomeScreen() {
@@ -20,8 +28,17 @@ export default function HomeScreen() {
   useEffect(() => {
     async function fetchPlants() {
       try {
-        const data = await getAllPlants();
-        setPlants(data);
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser();
+        if (error || !user) {
+          console.error('Error fetching user:', error);
+          return;
+        }
+
+        const response = await getUserPlants(user.id);
+        setPlants(response.data.plants);
       } catch (err) {
         console.log('error fetching plants', err);
       }
@@ -48,11 +65,7 @@ export default function HomeScreen() {
         data={plants}
         keyExtractor={(item) => item.plant_id.toString()}
         contentContainerStyle={{ paddingHorizontal: 16 }}
-        renderItem={({ item }) => (
-          <PlantPreviewCard
- plant={item} 
-          />
-        )}
+        renderItem={({ item }) => <PlantPreviewCard plant={item} />}
       />
     </SafeAreaView>
   );

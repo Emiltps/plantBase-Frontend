@@ -1,18 +1,33 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+import { supabase } from './supabaseClient';
 
-const api = axios.create({
-  baseURL: 'https://plantbase-be.onrender.com/', //admend once hosted
-  timeout: 9000,
-});
-
-export const setAuthToken = (token: string | null) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
+export type Plant = {
+  plant_id: number;
+  nickname: string;
+  profile_description: string;
+  photo_url?: string;
+  owner_id: string;
+  plant_type_id: string;
+  notes?: string;
+  status: string;
+  created_at: string;
+  died_at: string | null;
 };
 
-const getPlants = (userId: string) => api.get(`/api/${userId}/plants`);
+const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
 
-export default getPlants;
+async function getAuthHeaders() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return {
+    Authorization: `Bearer ${session?.access_token}`,
+  };
+}
+
+async function getUserPlants(userId: any) {
+  const headers = await getAuthHeaders();
+  return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/${userId}/plants`, { headers });
+}
+export default getUserPlants;
