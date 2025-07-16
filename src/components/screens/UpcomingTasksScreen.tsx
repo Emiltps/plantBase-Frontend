@@ -28,15 +28,15 @@ type CareTask = {
   due_at: string;
   completed_at: string;
   created_at: string;
-  task_type?: string;
-  plant_id?: number;
+  task_type: string;
+  plant_id: number;
+  nickname: string;
 };
 
 export default function UpcomingTasksScreen() {
   const { user } = useAuth();
   const [allTasks, setAllTasks] = useState<CareTask[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<CareTask[]>([]);
-  const [plantsMap, setPlantsMap] = useState<Record<number, string>>({});
   const [view, setView] = useState<'today' | 'thisWeek'>('today');
   const [loading, setLoading] = useState(true);
 
@@ -48,52 +48,10 @@ export default function UpcomingTasksScreen() {
         const userId = user.id;
         const headers = await getAuthHeaders();
 
-        const tasksRes = await api.get(`/users/${userId}/care_tasks`, { headers });
-        const plantsRes = await api.get(`/users/${userId}/plants`, { headers });
+        const tasksRes = await api.get(`/api/users/${userId}/care_tasks`, { headers });
+        const tasks: CareTask[] = tasksRes.data.tasks;
 
-        const tasks: CareTask[] = tasksRes.data?.tasks ?? [];
-        const plants = plantsRes.data?.plants ?? [];
-
-        const plantMap: Record<number, string> = {};
-        plants.forEach((plant: any) => {
-          plantMap[plant.plant_id] = plant.nickname;
-        });
-        setPlantsMap(plantMap);
-
-        const scheduleResponses = await Promise.allSettled(
-          plants.map((plant: any) =>
-            api.get(`/plants/${plant.plant_id}/care_schedules`, { headers }).then((res) =>
-              res.data.map((schedule: any) => ({
-                schedule_id: schedule.schedule_id,
-                task_type: schedule.task_type,
-                plant_id: plant.plant_id,
-              }))
-            )
-          )
-        );
-
-        const allSchedules = scheduleResponses
-          .filter((r) => r.status === 'fulfilled')
-          .flatMap((r: any) => r.value);
-
-        const scheduleMap: Record<number, { task_type: string; plant_id: number }> = {};
-        allSchedules.forEach((s) => {
-          scheduleMap[s.schedule_id] = {
-            task_type: s.task_type,
-            plant_id: s.plant_id,
-          };
-        });
-
-        const enrichedTasks = tasks.map((task) => {
-          const schedule = scheduleMap[task.schedule_id];
-          return {
-            ...task,
-            task_type: schedule?.task_type ?? 'Unknown',
-            plant_id: schedule?.plant_id ?? 0,
-          };
-        });
-
-        setAllTasks(enrichedTasks);
+        setAllTasks(tasks);
       } catch (error) {
         console.error('Error loading tasks:', error);
       } finally {
@@ -134,7 +92,10 @@ export default function UpcomingTasksScreen() {
     <SafeAreaView className="flex-1 items-center bg-white">
       <Text className="py-3 text-2xl font-bold text-lime-800">Upcoming Tasks</Text>
       <TaskViewSwitcher selected={view} onSelect={setView} />
-      <UpcomingTaskList tasks={filteredTasks} plantsMap={plantsMap} />
+      <UpcomingTaskList
+        tasks={filteredTasks}
+        plantsMap={Object.fromEntries(filteredTasks.map((t) => [t.plant_id, t.nickname]))}
+      />
     </SafeAreaView>
   );
 }
