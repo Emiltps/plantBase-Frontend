@@ -64,3 +64,8 @@ export async function getPlant(plantId: string): Promise<Plant> {
   const res = await axios.get<{ plant: Plant }>(`${API_BASE}/api/plants/${plantId}`, { headers });
   return res.data.plant;
 }
+
+export async function deletePlant(plantId: string): Promise<void> {
+  const headers = await getAuthHeaders();
+  await axios.delete(`${API_BASE}/api/plants/${plantId}`, { headers });
+}
