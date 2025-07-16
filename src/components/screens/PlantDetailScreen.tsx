@@ -1,17 +1,21 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
+import Constants from 'expo-constants';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Image } from 'react-native';
 import { capitalizeWord } from '~/utils/utils';
+import { getPlant } from '../../../api/MyPlantsApi';
+
+const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl || '';
 
 type PlantType = {
-  id?: string;
+  plant_id: number;
   owner_id: string;
   plant_type_id: number;
   nickname: string;
-  photo_url: string;
+  photo_url?: string;
   profile_description: string;
   notes?: string;
   status: string;
@@ -20,32 +24,50 @@ type PlantType = {
 };
 
 type RootStackParamList = {
-  PlantDetailScreen: { plant: PlantType };
-  EditPlantScreen: { plant: PlantType };
+  PlantDetailScreen: { plantId: string };
+  EditPlantScreen: { plantId: string };
   EditScheduleScreen: { plantId?: string };
   UpcomingTasksScreen: { plantId?: string };
 };
 
 type PlantDetailScreenRouteProp = RouteProp<RootStackParamList, 'PlantDetailScreen'>;
 
-const mockPlant = {
-  owner_id: '12e3f4a5-b6c7-4d89-8e01-23f45c67d890',
-  plant_type_id: 4,
-  nickname: 'Fernie',
-  photo_url:
-    'https://www.houseplant.co.uk/cdn/shop/files/Boston_Fern_Green_Moment_Indoor_Tropical_Houseplant.jpg?v=1737121676',
-  profile_description: 'A vibrant Boston fern thriving in the living room.',
-  notes: 'Needs watering every 3 days.',
-  status: 'alive',
-  created_at: '2024-05-01T10:30:00Z',
-  died_at: null,
-};
-
 const PlantDetailScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<PlantDetailScreenRouteProp>();
 
-  const plant = route.params?.plant ?? mockPlant;
+  const { plantId } = route.params;
+  const [plant, setPlant] = useState<PlantType | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPlantDetail = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getPlant(plantId);
+      setPlant(data);
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
+  }, [plantId]);
+
+  useEffect(() => {
+    fetchPlantDetail();
+  }, [fetchPlantDetail]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlantDetail();
+    }, [fetchPlantDetail])
+  );
+
+  if (loading || !plant) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size={50} color="#4b8457" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView className="flex-1 bg-white" contentContainerStyle={{ paddingBottom: 100 }}>
@@ -54,7 +76,9 @@ const PlantDetailScreen = () => {
         {/* Image */}
         <View className="relative" style={{ flex: 6.5 }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('EditPlantScreen', { plant })}
+            onPress={() =>
+              navigation.navigate('EditPlantScreen', { plantId: plant.plant_id.toString() })
+            }
             className="mb-2 w-full flex-row items-center justify-center rounded-2xl bg-white px-3 py-4">
             <FontAwesome6 name="edit" size={20} color="#4b8457" />
             <Text className="ml-2 text-lg font-semibold text-primary">Edit</Text>
@@ -99,12 +123,16 @@ const PlantDetailScreen = () => {
       {/* View Care Schedule */}
       <View className="mt-6 flex-row px-4">
         <TouchableOpacity
-          onPress={() => navigation.navigate('EditScheduleScreen', { plantId: plant.id })}
+          onPress={() =>
+            navigation.navigate('EditScheduleScreen', { plantId: plant.plant_id.toString() })
+          }
           className="mr-2 aspect-square h-[64px] items-center justify-center rounded-2xl bg-primary">
           <FontAwesome6 name="add" size={24} color="#ffffff" />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('UpcomingTasksScreen', { plantId: plant.id })}
+          onPress={() =>
+            navigation.navigate('UpcomingTasksScreen', { plantId: plant.plant_id.toString() })
+          }
           className="flex-1 items-center justify-center rounded-2xl bg-primary py-5">
           <Text className="text-lg font-semibold text-white">View Care Schedule</Text>
         </TouchableOpacity>
