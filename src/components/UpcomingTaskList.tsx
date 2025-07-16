@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { parseISO, format } from 'date-fns';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
 type CareSchedule = {
   plant_id: number;
@@ -16,6 +18,8 @@ type Props = {
 };
 
 export default function UpcomingTaskList({ tasks, plantsMap }: Props) {
+  const navigation = useNavigation() as any;
+
   if (tasks.length === 0) {
     return (
       <View className="mt-8 items-center">
@@ -30,13 +34,17 @@ export default function UpcomingTaskList({ tasks, plantsMap }: Props) {
       keyExtractor={(item, index) => `${item.plant_id}-${item.task_type}-${index}`}
       contentContainerStyle={{ padding: 16 }}
       renderItem={({ item }) => (
-        <View className="mb-4 rounded-xl bg-lime-100 px-24 py-4">
-          <Text className="mb-1 text-lg font-semibold capitalize">🪴 {item.task_type}</Text>
-          <Text className="text-gray-700">
-            Plant: {plantsMap[item.plant_id] ?? `ID ${item.plant_id}`}
-          </Text>
-          <Text className="text-gray-600">Due: {format(parseISO(item.next_due), 'PPP')}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('EditTask', { task: item })}
+          className="mb-4 rounded-xl bg-lime-100 px-24 py-4">
+          <View className="mb-4 rounded-xl bg-lime-100 px-24 py-4">
+            <Text className="mb-1 text-lg font-semibold capitalize">🪴 {item.task_type}</Text>
+            <Text className="text-gray-700">
+              Plant: {plantsMap[item.plant_id] ?? `ID ${item.plant_id}`}
+            </Text>
+            <Text className="text-gray-600">Due: {format(parseISO(item.next_due), 'PPP')}</Text>
+          </View>
+        </TouchableOpacity>
       )}
     />
   );

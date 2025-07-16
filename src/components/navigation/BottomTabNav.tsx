@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import HomeScreen from '../screens/HomeScreen';
 import HomeStackNav from '../navigation/HomeStackNav';
+import UpcomingStackNav from '../navigation/UpcomingStackNav';
 import UpcomingTasksScreen from '../screens/UpcomingTasksScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,8 +57,9 @@ export default function BottomTabNav() {
         },
       })}>
       {/* <Tab.Screen name="Home" component={HomeScreen} /> */}
+      {/* <Tab.Screen name="Tasks" component={UpcomingTasksScreen} /> */}
       <Tab.Screen name="Home" component={HomeStackNav} />
-      <Tab.Screen name="Tasks" component={UpcomingTasksScreen} />
+      <Tab.Screen name="Tasks" component={UpcomingStackNav} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

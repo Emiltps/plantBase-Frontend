@@ -19,17 +19,17 @@ export default function GetStartedScreen() {
             resizeMode="contain"
           />
         </SafeAreaView>
-        <View className="bg-light-green-bg absolute bottom-0 left-0 right-0 m-4 mb-8 items-center rounded-3xl p-4">
+        <View className="bg-light-green-bg absolute bottom-0 left-0 right-0 m-4 mb-8 items-center rounded-[24px] p-4">
           <TouchableOpacity
             onPress={() => navigation.navigate('SignUp')}
-            className="bg-primary mb-0 mb-4 w-full rounded-lg py-5">
+            className="bg-primary mb-0 mb-4 w-full rounded-2xl py-6">
             <Text className="text-center text-xl font-semibold text-white">Get Started</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => navigation.navigate('Login')}
-            className="border-primary w-full rounded-lg border">
-            <Text className="text-primary p-4 text-center text-lg font-semibold">Log In</Text>
+            className="border-primary w-full rounded-2xl border border-2">
+            <Text className="text-primary p-5 text-center text-lg font-semibold">Log In</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
