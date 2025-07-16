@@ -1,48 +1,78 @@
-import React, { useState } from 'react';
-import { Text, ScrollView, Alert } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { updatePlant } from '../../../api/MyPlantsApi';
+import { updatePlant, getPlant } from '../../../api/MyPlantsApi';
+import type { Plant } from '../../../api/MyPlantsApi';
 import PlantTextInput from '../PlantForm/PlantTextInput';
 import PlantStatusDropdown from '../PlantForm/PlantStatusDropdown';
 import PrimaryButton from '../PlantForm/PrimaryButton';
 
 type RootStackParamList = {
-  EditPlant: { plant: Plant };
+  EditPlantScreen: { plantId: string; onGoBack?: () => void };
 };
 
-type EditPlantRouteProp = RouteProp<RootStackParamList, 'EditPlant'>;
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
-type Plant = {
-  plant_id: number;
-  nickname: string;
-  profile_description: string;
-  photo_url?: string;
-  owner_id: string;
-  plant_type_id: string;
-  notes?: string;
-  status: string;
-  created_at: string;
-  died_at: string | null;
-};
+type EditPlantRouteProp = RouteProp<RootStackParamList, 'EditPlantScreen'>;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'EditPlantScreen'>;
 
 export default function EditPlantScreen() {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, 'EditPlantScreen'>>();
   const route = useRoute<EditPlantRouteProp>();
-  const plant = route.params.plant;
+  const { plantId } = route.params;
+  const [plant, setPlant] = useState<Plant | null>(null);
+  const [nickname, setNickname] = useState('');
+  const [notes, setNotes] = useState('');
+  const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  const [nickname, setNickname] = useState(plant.nickname);
-  const [notes, setNotes] = useState(plant.notes || '');
-  const [status, setStatus] = useState(plant.status);
+  const fetchPlantDetail = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await getPlant(plantId);
+      setPlant(data);
+      setNickname(data.nickname);
+      setNotes(data.notes || '');
+      setStatus(data.status.toUpperCase());
+    } catch {
+      Alert.alert('Error', 'Could not load plant for editing');
+      navigation.goBack();
+    } finally {
+      setLoading(false);
+    }
+  }, [plantId, navigation]);
+
+  useEffect(() => {
+    fetchPlantDetail();
+  }, [fetchPlantDetail]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlantDetail();
+    }, [fetchPlantDetail])
+  );
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#4b8457" className="flex-1 justify-center" />;
+  }
 
   const handleSave = async () => {
+    const statusLower = status.toLowerCase();
+    const validStatuses = ['alive', 'infected', 'dead'];
+    if (!validStatuses.includes(statusLower)) {
+      Alert.alert(
+        'Invalid Plant Status',
+        'Please select a valid status: Alive, Infected, or Dead.'
+      );
+      return;
+    }
     try {
-      await updatePlant(String(plant.plant_id), { nickname, notes, status });
+      await updatePlant(String(plant!.plant_id), { nickname, notes, status: statusLower });
       Alert.alert('Success', 'Plant updated successfully.');
       navigation.goBack();
     } catch (error: any) {
-      console.error('failed to update');
+      const msg = 'Failed to update plant';
+      Alert.alert('Error', msg);
     }
   };
 
