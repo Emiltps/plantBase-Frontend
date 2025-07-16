@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import PlantInfoSection from '../PlantInfoSection';
 import PlantImageDisplay from '../PlantImageDisplay';
 
