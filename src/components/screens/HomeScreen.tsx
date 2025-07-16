@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import PlantPreviewCard from '../PlantPreviewCard';
 import { useNavigation } from '@react-navigation/native';
 import { getUserPlants } from '../../../api/MyPlantsApi';
@@ -8,7 +9,7 @@ import { supabase } from '../../../api/supabaseClient';
 import { format } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import { useRoute, useIsFocused } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 type Plant = {
   plant_id: number;
@@ -29,39 +30,40 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const navigation = useNavigation() as any;
   const route = useRoute() as any;
-  const isFocused = useIsFocused();
+
+  const fetchPlants = async () => {
+    try {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+      if (error || !user) {
+        console.error('Error fetching user:', error);
+        return;
+      }
+
+      const response = await getUserPlants(user.id);
+      setPlants(response.data.plants);
+    } catch (err) {
+      console.log('error fetching plants', err);
+    }
+  };
+
+  // Reload plant list whenever this screen gains focus
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlants();
+      // Check for a newly added plant via params
+      const newPlant = (route as any).params?.newPlant;
+      if (newPlant) {
+        setPlants((prev) => [newPlant, ...prev]);
+        (route as any).params.newPlant = null;
+      }
+    }, [route])
+  );
 
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || 'there';
   const todayFormatted = format(new Date(), "'Today is' EEEE, do 'of' MMMM");
-
-  useEffect(() => {
-    async function fetchPlants() {
-      try {
-        const {
-          data: { user },
-          error,
-        } = await supabase.auth.getUser();
-        if (error || !user) {
-          console.error('Error fetching user:', error);
-          return;
-        }
-
-        const response = await getUserPlants(user.id);
-        setPlants(response.data.plants);
-      } catch (err) {
-        console.log('error fetching plants', err);
-      }
-    }
-    fetchPlants();
-  }, []);
-
-  useEffect(() => {
-    const newPlant = (route as any).params?.newPlant;
-    if (newPlant) {
-      setPlants((prev) => [newPlant, ...prev]);
-      (route as any).params.newPlant = null;
-    }
-  }, [route, isFocused]);
 
   return (
     <SafeAreaView className="flex-1 bg-bg">
