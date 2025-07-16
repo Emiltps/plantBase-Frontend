@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import PlantInfoSection from '../PlantInfoSection';
 import PlantImageDisplay from '../PlantImageDisplay';
 
@@ -20,8 +21,8 @@ type PlantType = {
 type RootStackParamList = {
   PlantDetailScreen: { plant: PlantType };
   EditPlant: { plant: PlantType };
-  EditSchedule: { plantId?: string };
-  UpcomingTasks: { plantId?: string };
+  EditScheduleScreen: { plantId?: string };
+  UpcomingTasksScreen: { plantId?: string };
 };
 
 type PlantDetailScreenRouteProp = RouteProp<RootStackParamList, 'PlantDetailScreen'>;
@@ -40,7 +41,7 @@ const mockPlant = {
 };
 
 const PlantDetailScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<PlantDetailScreenRouteProp>();
 
   const plant = route.params?.plant ?? mockPlant;
@@ -59,7 +60,7 @@ const PlantDetailScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('EditSchedule', { plantId: plant.id })}
+          onPress={() => navigation.navigate('EditScheduleScreen', { plantId: plant.id })}
           className="mb-4 rounded-lg bg-emerald-500 py-3">
           <Text className="text-center text-base font-semibold text-white">
             Add / Edit Schedule
@@ -67,7 +68,7 @@ const PlantDetailScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('UpcomingTasks', { plantId: plant.id })}
+          onPress={() => navigation.navigate('UpcomingTasksScreen', { plantId: plant.id })}
           className="rounded-lg bg-lime-500 py-3">
           <Text className="text-center text-base font-semibold text-white">Upcoming Tasks</Text>
         </TouchableOpacity>
