@@ -2,19 +2,12 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import { supabase } from './supabaseClient';
 
-export type Plant = {
-  plant_id: number;
-  nickname: string;
-  profile_description: string;
-  photo_url?: string;
-  owner_id: string;
-  plant_type_id: string;
-  notes?: string;
-  status: string;
+export type CareTask = {
+  schedule_id: number;
+  due_at: string;
+  completed_at: string;
   created_at: string;
-  died_at: string | null;
 };
-
 const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
 
 async function getAuthHeaders() {
@@ -26,8 +19,7 @@ async function getAuthHeaders() {
   };
 }
 
-async function getUserPlants(userId: string) {
+export const getMyCareTasks = async (userId: string) => {
   const headers = await getAuthHeaders();
-  return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/users/${userId}/plants`, { headers });
-}
-export default getUserPlants;
+  return await axios.get(`${API_BASE}/api/users/${userId}/care_tasks`, { headers });
+};
