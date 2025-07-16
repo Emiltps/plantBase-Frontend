@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Constants from 'expo-constants';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Image } from 'react-native';
 import { capitalizeWord } from '~/utils/utils';
 import { getPlant } from '../../../api/MyPlantsApi';
+import { deletePlant } from '../../../api/MyPlantsApi';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl || '';
 
@@ -60,6 +63,17 @@ const PlantDetailScreen = () => {
       fetchPlantDetail();
     }, [fetchPlantDetail])
   );
+
+  const handleDelete = async () => {
+    try {
+      await deletePlant(plant!.plant_id.toString());
+      Alert.alert('Deleted', 'Plant deleted successfully.', [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.msg || 'Failed to delete plant');
+    }
+  };
 
   if (loading || !plant) {
     return (
@@ -139,7 +153,7 @@ const PlantDetailScreen = () => {
       </View>
 
       {/* Details Section */}
-      <View className="mt-4 rounded-t-3xl bg-white px-4 pb-8 pt-6">
+      <View className="mt-4 rounded-t-3xl bg-white px-4 pt-6">
         <Text className="mb-5 text-center text-2xl font-semibold text-text-main">
           {plant.nickname}
         </Text>
@@ -153,6 +167,16 @@ const PlantDetailScreen = () => {
         <View className="mb-4 mt-3 rounded-3xl bg-light-green-bg p-6">
           <Text className="text-xl text-text-main">{plant.notes || 'No notes available.'}</Text>
         </View>
+      </View>
+
+      {/* Delete Button */}
+      <View className="mb-12 px-4">
+        <TouchableOpacity
+          onPress={handleDelete}
+          className="flex-row items-center justify-center rounded-2xl bg-red-light px-4 py-4 py-6">
+          <MaterialIcons name="delete-outline" size={24} color="#b01d3e" />
+          <Text className="ml-2 text-lg font-bold text-red-main">Delete Plant</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
