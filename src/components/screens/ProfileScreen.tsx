@@ -79,7 +79,8 @@ export default function ProfileScreen() {
       contentContainerStyle={{ flexGrow: 1 }}
       enableOnAndroid
       enableAutomaticScroll
-      keyboardShouldPersistTaps="handled">
+      keyboardShouldPersistTaps="handled"
+      extraScrollHeight={50}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView edges={['top']} className="flex-1 bg-white px-6 pt-4">
           <View className="mb-8 mt-4 items-center">
@@ -94,7 +95,7 @@ export default function ProfileScreen() {
             value={fullName}
             onChangeText={setFullName}
             placeholder="Enter your full name"
-            className="bg-bg mb-4 rounded-2xl px-6 py-6 text-xl"
+            className="mb-4 rounded-2xl bg-bg px-6 py-6 text-xl"
           />
 
           {/* Username */}
@@ -113,13 +114,13 @@ export default function ProfileScreen() {
             placeholder="Enter your email"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="bg-bg mb-4 rounded-2xl px-6 py-6 text-xl"
+            className="mb-4 rounded-2xl bg-bg px-6 py-6 text-xl"
           />
 
           <TouchableOpacity
             onPress={handleSave}
             disabled={loading}
-            className="bg-primary mb-6 flex-row items-center items-center justify-center rounded-2xl py-6">
+            className="mb-6 flex-row items-center items-center justify-center rounded-2xl bg-primary py-6">
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
@@ -132,9 +133,9 @@ export default function ProfileScreen() {
 
           <TouchableOpacity
             onPress={() => signOut()}
-            className="bg-red-light flex-row items-center justify-center rounded-2xl px-4 py-4 py-6">
+            className="flex-row items-center justify-center rounded-2xl bg-red-light px-4 py-4 py-6">
             <Feather name="log-out" size={24} color="#b01d3e" />
-            <Text className="text-red-main ml-2 text-lg font-bold">Log Out</Text>
+            <Text className="ml-2 text-lg font-bold text-red-main">Log Out</Text>
           </TouchableOpacity>
         </SafeAreaView>
       </TouchableWithoutFeedback>
