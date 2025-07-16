@@ -9,12 +9,12 @@ type Props = {
 
 export default function PlantTextInput({ label, value, onChangeText }: Props) {
   return (
-    <View className="mb-4">
-      <Text className="mb-1 text-base">{label}</Text>
+    <View>
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        className="rounded-lg border border-gray-300 p-2"
+        className="mb-4 rounded-2xl bg-gray-200 px-6 py-6 text-xl"
+        placeholder={label}
       />
     </View>
   );
