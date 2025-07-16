@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  StatusBar,
+  ImageBackground,
+  Image,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigation } from '@react-navigation/native';
@@ -21,34 +33,55 @@ export default function LoginScreen() {
     }
   };
   return (
-    <>
-      <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
-      <SafeAreaView edges={['top']} className="flex-1 justify-center bg-white px-6">
-        <Text className="mb-8 text-center text-2xl font-bold">Welcome Back</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          className="mb-4 rounded-lg border border-gray-300 px-4 py-2"
-        />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          className="mb-6 rounded-lg border border-gray-300 px-4 py-2"
-        />
-        <TouchableOpacity onPress={handleLogin} className="mb-4 rounded-lg bg-green-500 py-3">
-          <Text className="text-center font-medium text-white">Log In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text className="text-center text-gray-600">
-            Don’t have an account? <Text className="text-green-500">Sign Up</Text>
-          </Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}
+      enableOnAndroid
+      enableAutomaticScroll
+      keyboardShouldPersistTaps="handled">
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ImageBackground
+          source={require('../../../assets/bg.jpg')}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <SafeAreaView edges={['top']} className="flex-1 px-6">
+            <View className="h-fit grow items-center justify-center">
+              <Image
+                source={require('../../../assets/logo-circle-zero.png')}
+                className="mx-auto h-44 w-44 rounded-full border-[6px] border-white"
+                resizeMode="contain"
+              />
+            </View>
+            <View className="bg-light-green-bg w-screen rounded-3xl p-6 pb-12">
+              <Text className="text-text-green pb-10 pt-4 text-center text-3xl font-bold">
+                Log In
+              </Text>
+              <TextInput
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                className="mb-4 rounded-2xl bg-white px-6 py-6 text-xl"
+              />
+              <TextInput
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                className="mb-4 rounded-2xl bg-white px-6 py-6 text-xl"
+              />
+              <TouchableOpacity onPress={handleLogin} className="bg-primary mb-6 rounded-2xl py-6">
+                <Text className="text-center text-xl font-bold text-white">Log In</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                <Text className="text-center text-lg text-gray-600">
+                  Don’t have an account? <Text className="text-primary font-bold">Sign Up</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }

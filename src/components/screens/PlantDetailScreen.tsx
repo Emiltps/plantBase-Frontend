@@ -48,7 +48,7 @@ const plant = route.params?.plant ?? mockPlant;
 
 
   return (
-    <ScrollView className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-lime-50">
          <PlantImageDisplay photo_url={plant.photo_url} />
 
       <View className="px-4 py-6">
