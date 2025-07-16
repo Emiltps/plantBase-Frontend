@@ -1,20 +1,28 @@
 import React from 'react';
-import { TextInput, Text, View } from 'react-native';
+import { TextInput, Text, View, TextInputProps } from 'react-native';
 
-type Props = {
+type Props = TextInputProps & {
   label: string;
-  value: string;
-  onChangeText: (text: string) => void;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
-export default function PlantTextInput({ label, value, onChangeText }: Props) {
+export default function PlantTextInput({
+  label,
+  multiline,
+  numberOfLines,
+  ...textInputProps
+}: Props) {
   return (
     <View>
       <TextInput
-        value={value}
-        onChangeText={onChangeText}
         className="mb-4 rounded-2xl bg-gray-200 px-6 py-6 text-xl"
         placeholder={label}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        textAlignVertical="top"
+        style={multiline && numberOfLines ? { height: numberOfLines * 24 } : undefined}
+        {...textInputProps}
       />
     </View>
   );
