@@ -21,8 +21,6 @@ async function getAuthHeaders() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-   const token = session?.access_token
-    console.log('🔑 Retrieved auth token:', token?.slice(0, 10), '...')
   return {
     Authorization: `Bearer ${session?.access_token}`,
   };
