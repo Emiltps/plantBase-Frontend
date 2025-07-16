@@ -11,6 +11,7 @@ export type Plant = {
   plant_type_id: number;
   notes?: string;
   status: string;
+
   created_at: string;
   died_at: string | null;
 };
@@ -37,6 +38,8 @@ export async function updatePlant(
     nickname?: string;
     notes?: string;
     status?: string;
+    profile_description?: string;
+    photo_url?: string;
   }
 ) {
   const headers = await getAuthHeaders();
