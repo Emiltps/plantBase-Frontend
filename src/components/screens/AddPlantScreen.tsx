@@ -43,7 +43,7 @@ export default function AddPlantScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
+    <ScrollView className="flex-1 bg-white p-4" contentContainerStyle={{ paddingBottom: 132 }}>
       <Text className="mb-4 text-2xl font-bold">Add Plant</Text>
 
       <PlantTextInput label="Plant Name" value={nickname} onChangeText={setNickname} />
