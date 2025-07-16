@@ -28,6 +28,6 @@ async function getAuthHeaders() {
 
 async function getUserPlants(userId: any) {
   const headers = await getAuthHeaders();
-  return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/${userId}/plants`, { headers });
+  return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/users/${userId}/plants`, { headers });
 }
 export default getUserPlants;

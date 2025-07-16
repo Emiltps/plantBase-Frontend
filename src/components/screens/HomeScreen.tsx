@@ -38,6 +38,7 @@ export default function HomeScreen() {
         }
 
         const response = await getUserPlants(user.id);
+        console.log(response.data.plants);
         setPlants(response.data.plants);
       } catch (err) {
         console.log('error fetching plants', err);
