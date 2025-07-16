@@ -26,7 +26,7 @@ async function getAuthHeaders() {
   };
 }
 
-  export async function getUserPlants(userId: any) {
+export async function getUserPlants(userId: any) {
   const headers = await getAuthHeaders();
   return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/users/${userId}/plants`, { headers });
 }
@@ -43,7 +43,6 @@ export async function updatePlant(
   return axios.patch<{ plant: Plant }>(`${API_BASE}/api/plants/${plantId}`, updates, { headers });
 }
 
-
 export async function createPlant(plantData: {
   plant_type_id: number;
   nickname: string;
@@ -54,10 +53,14 @@ export async function createPlant(plantData: {
   died_at?: string | null;
 }) {
   const headers = await getAuthHeaders();
-  const response = await axios.post<{ plant: Plant }>(
-    `${API_BASE}/api/plants`,
-    plantData,
-    { headers }
-  );
+  const response = await axios.post<{ plant: Plant }>(`${API_BASE}/api/plants`, plantData, {
+    headers,
+  });
   return response.data.plant;
+}
+
+export async function getPlant(plantId: string): Promise<Plant> {
+  const headers = await getAuthHeaders();
+  const res = await axios.get<{ plant: Plant }>(`${API_BASE}/api/plants/${plantId}`, { headers });
+  return res.data.plant;
 }
