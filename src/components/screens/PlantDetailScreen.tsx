@@ -20,7 +20,7 @@ type PlantType = {
 
 type RootStackParamList = {
   PlantDetailScreen: { plant: PlantType };
-  EditPlant: { plant: PlantType };
+  EditPlantScreen: { plant: PlantType };
   EditScheduleScreen: { plantId?: string };
   UpcomingTasksScreen: { plantId?: string };
 };
@@ -54,7 +54,7 @@ const PlantDetailScreen = () => {
         <PlantInfoSection plant={plant} />
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('EditPlant', { plant })}
+          onPress={() => navigation.navigate('EditPlantScreen', { plant })}
           className="mb-4 rounded-lg bg-green-600 py-3">
           <Text className="text-center text-base font-semibold text-white">Edit Plant</Text>
         </TouchableOpacity>
