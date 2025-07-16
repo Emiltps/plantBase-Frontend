@@ -15,16 +15,18 @@ const options: { key: ViewOption; label: string }[] = [
 
 export default function TaskViewSwitcher({ selected, onSelect }: Props) {
   return (
-    <View className="flex-row items-center justify-center">
+    <View className="mx-4 my-2 flex-row rounded-3xl bg-green-bg p-2">
       {options.map((opt) => (
         <Pressable
           key={opt.key}
           onPress={() => onSelect(opt.key)}
-          className={`rounded-full px-6 py-4 ${
-            selected === opt.key ? 'bg-lime-600' : 'bg-transparent'
+          className={`w-half flex-1 rounded-2xl px-4 py-4 ${
+            selected === opt.key ? 'bg-primary' : 'bg-transparent'
           }`}>
           <Text
-            className={`text-lg font-medium ${selected === opt.key ? 'text-white' : 'text-lime-700'}`}>
+            className={`text-center text-lg font-medium ${
+              selected === opt.key ? 'text-white' : 'text-text-main'
+            }`}>
             {opt.label}
           </Text>
         </Pressable>

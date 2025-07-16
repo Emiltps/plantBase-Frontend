@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Text, ActivityIndicator, SafeAreaView } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import { parseISO, startOfToday, endOfToday, endOfWeek, isWithinInterval } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
 import TaskViewSwitcher from '../TaskViewSwitcher';
-import UpcomingTaskList from '../UpcomingTaskList';
+import UpcomingTaskList, { CareTask } from '../UpcomingTaskList';
 import { supabase } from '../../../api/supabaseClient';
 
 const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
@@ -23,16 +24,6 @@ async function getAuthHeaders() {
   };
 }
 
-type CareTask = {
-  schedule_id: number;
-  due_at: string;
-  completed_at: string;
-  created_at: string;
-  task_type: string;
-  plant_id: number;
-  nickname: string;
-};
-
 export default function UpcomingTasksScreen() {
   const { user } = useAuth();
   const [allTasks, setAllTasks] = useState<CareTask[]>([]);
@@ -48,7 +39,9 @@ export default function UpcomingTasksScreen() {
         const userId = user.id;
         const headers = await getAuthHeaders();
 
-        const tasksRes = await api.get(`/api/users/${userId}/care_tasks`, { headers });
+        const tasksRes = await api.get<{ tasks: CareTask[] }>(`/api/users/${userId}/care_tasks`, {
+          headers,
+        });
         const tasks: CareTask[] = tasksRes.data.tasks;
 
         setAllTasks(tasks);
@@ -82,20 +75,19 @@ export default function UpcomingTasksScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+      <SafeAreaView
+        edges={['top', 'bottom']}
+        className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#4CAF50" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 items-center bg-white">
-      <Text className="py-3 text-2xl font-bold text-lime-800">Upcoming Tasks</Text>
+    <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-white pt-8">
+      <Text className="mb-8 text-center text-2xl font-bold">Upcoming Tasks</Text>
       <TaskViewSwitcher selected={view} onSelect={setView} />
-      <UpcomingTaskList
-        tasks={filteredTasks}
-        plantsMap={Object.fromEntries(filteredTasks.map((t) => [t.plant_id, t.nickname]))}
-      />
+      <UpcomingTaskList tasks={filteredTasks} view={view} />
     </SafeAreaView>
   );
 }

@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 import { supabase } from './supabaseClient';
 
 export type CareTask = {
+  care_tasks_id: number;
   schedule_id: number;
   due_at: string;
   completed_at: string;
@@ -22,4 +23,13 @@ async function getAuthHeaders() {
 export const getMyCareTasks = async (userId: string) => {
   const headers = await getAuthHeaders();
   return await axios.get(`${API_BASE}/api/users/${userId}/care_tasks`, { headers });
+};
+
+export const completeTask = async (careTaskId: number): Promise<void> => {
+  const headers = await getAuthHeaders();
+  await axios.patch(
+    `${API_BASE}/api/care_tasks/${careTaskId}/complete`,
+    { completed_at: new Date().toISOString() },
+    { headers }
+  );
 };
