@@ -8,7 +8,7 @@ export type Plant = {
   profile_description: string;
   photo_url?: string;
   owner_id: string;
-  plant_type_id: string;
+  plant_type_id: number;
   notes?: string;
   status: string;
   created_at: string;
@@ -21,6 +21,8 @@ async function getAuthHeaders() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+   const token = session?.access_token
+    console.log('🔑 Retrieved auth token:', token?.slice(0, 10), '...')
   return {
     Authorization: `Bearer ${session?.access_token}`,
   };
@@ -41,4 +43,23 @@ export async function updatePlant(
 ) {
   const headers = await getAuthHeaders();
   return axios.patch<{ plant: Plant }>(`${API_BASE}/api/plants/${plantId}`, updates, { headers });
+}
+
+
+export async function createPlant(plantData: {
+  plant_type_id: number;
+  nickname: string;
+  photo_url?: string;
+  profile_description: string;
+  notes?: string;
+  status?: string;
+  died_at?: string | null;
+}) {
+  const headers = await getAuthHeaders();
+  const response = await axios.post<{ plant: Plant }>(
+    `${API_BASE}/api/plants`,
+    plantData,
+    { headers }
+  );
+  return response.data.plant;
 }
