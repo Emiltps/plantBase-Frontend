@@ -18,7 +18,7 @@ type PlantType = {
 };
 
 type RootStackParamList = {
-  PlantDetailScreen: { plant: PlantType };
+  PlantDetailScreen: { plantId: string };
 };
 type Props = {
   plant: PlantType;
@@ -26,12 +26,13 @@ type Props = {
 
 export default function PlantPreviewCard({ plant }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const handlePress = () => {
-    navigation.navigate('PlantDetailScreen', { plant });
-  };
   return (
     <Pressable
-      onPress={handlePress}
+      onPress={() =>
+        navigation.navigate('PlantDetailScreen', {
+          plantId: plant.plant_id.toString(),
+        })
+      }
       className="mb-3 flex-row items-center justify-between rounded-3xl border border-gray-200 bg-white p-3">
       {plant.photo_url ? (
         <Image
