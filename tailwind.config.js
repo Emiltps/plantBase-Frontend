@@ -4,7 +4,18 @@ module.exports = {
 
   presets: [require('nativewind/dist/tailwind')],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#4b8457',
+        bg: '#f8f8f8',
+        'text-green': '#306739',
+        'text-main': '#0f1712',
+        'green-bg': '#d8eadd',
+        'light-green-bg': '#e9f4ee',
+        'red-light': '#ffe8e9',
+        'red-main': '#b01d3e',
+      },
+    },
   },
   plugins: [],
 };
