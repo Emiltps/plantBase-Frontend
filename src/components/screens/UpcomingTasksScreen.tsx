@@ -1,72 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Text, ActivityIndicator, SafeAreaView } from 'react-native';
 import axios from 'axios';
+import Constants from 'expo-constants';
+import { parseISO, startOfToday, endOfToday, endOfWeek, isWithinInterval } from 'date-fns';
+import { useAuth } from '../../contexts/AuthContext';
 import TaskViewSwitcher from '../TaskViewSwitcher';
 import UpcomingTaskList from '../UpcomingTaskList';
-import { startOfToday, endOfToday, endOfWeek, isWithinInterval, parseISO } from 'date-fns';
+import { supabase } from '../../../api/supabaseClient';
 
-type CareSchedule = {
-  plant_id: number;
-  task_type: string;
-  interval_days: number;
-  next_due: string;
+const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
+
+const api = axios.create({
+  baseURL: API_BASE,
+});
+
+async function getAuthHeaders() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return {
+    Authorization: `Bearer ${session?.access_token}`,
+  };
+}
+
+type CareTask = {
+  schedule_id: number;
+  due_at: string;
+  completed_at: string;
   created_at: string;
-};
-
-type Plant = {
+  task_type: string;
   plant_id: number;
   nickname: string;
 };
 
 export default function UpcomingTasksScreen() {
-  const [allTasks, setAllTasks] = useState<CareSchedule[]>([]);
-  const [plantsMap, setPlantsMap] = useState<Record<number, string>>({});
-  const [filteredTasks, setFilteredTasks] = useState<CareSchedule[]>([]);
+  const { user } = useAuth();
+  const [allTasks, setAllTasks] = useState<CareTask[]>([]);
+  const [filteredTasks, setFilteredTasks] = useState<CareTask[]>([]);
   const [view, setView] = useState<'today' | 'thisWeek'>('today');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!user) return;
+      setLoading(true);
       try {
-        const storedUserId = await AsyncStorage.getItem('user_id');
-        if (!storedUserId) throw new Error('User ID not found');
-        const userId = parseInt(storedUserId);
+        const userId = user.id;
+        const headers = await getAuthHeaders();
 
-        const [tasksRes, plantsRes] = await Promise.all([
-          axios.get<CareSchedule[]>(`https://plantbase-be.onrender.com/users/${userId}/care_tasks`),
-          axios.get<Plant[]>(`https://plantbase-be.onrender.com/user/${userId}/plants`),
-        ]);
+        const tasksRes = await api.get(`/users/${userId}/care_tasks`, { headers });
+        const tasks: CareTask[] = tasksRes.data?.tasks ?? [];
 
-        setAllTasks(tasksRes.data);
-
-        const plantMap: Record<number, string> = {};
-        plantsRes.data.forEach((plant) => {
-          plantMap[plant.plant_id] = plant.nickname;
-        });
-        setPlantsMap(plantMap);
-      } catch (err) {
-        console.error('Error fetching data:', err);
+        setAllTasks(tasks);
+      } catch (error) {
+        console.error('Error loading tasks:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const now = new Date();
-
     const filtered = allTasks.filter((task) => {
-      const dueDate = parseISO(task.next_due);
+      const dueDate = parseISO(task.due_at);
       if (view === 'today') {
-        return isWithinInterval(dueDate, {
-          start: startOfToday(),
-          end: endOfToday(),
-        });
-      }
-      if (view === 'thisWeek') {
+        return isWithinInterval(dueDate, { start: startOfToday(), end: endOfToday() });
+      } else if (view === 'thisWeek') {
         return isWithinInterval(dueDate, {
           start: startOfToday(),
           end: endOfWeek(now, { weekStartsOn: 1 }),
@@ -80,16 +82,20 @@ export default function UpcomingTasksScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#4CAF50" />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 items-center bg-white">
+      <Text className="py-3 text-2xl font-bold text-lime-800">Upcoming Tasks</Text>
       <TaskViewSwitcher selected={view} onSelect={setView} />
-      <UpcomingTaskList tasks={filteredTasks} plantsMap={plantsMap} />
-    </View>
+      <UpcomingTaskList
+        tasks={filteredTasks}
+        plantsMap={Object.fromEntries(filteredTasks.map((t) => [t.plant_id, t.nickname]))}
+      />
+    </SafeAreaView>
   );
 }

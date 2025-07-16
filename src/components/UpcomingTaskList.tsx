@@ -2,16 +2,16 @@ import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { parseISO, format } from 'date-fns';
 
-type CareSchedule = {
+type CareTask = {
   plant_id: number;
   task_type: string;
-  interval_days: number;
-  next_due: string;
+  due_at: string;
+  completed_at: string | null;
   created_at: string;
 };
 
 type Props = {
-  tasks: CareSchedule[];
+  tasks: CareTask[];
   plantsMap: Record<number, string>;
 };
 
@@ -35,7 +35,7 @@ export default function UpcomingTaskList({ tasks, plantsMap }: Props) {
           <Text className="text-gray-700">
             Plant: {plantsMap[item.plant_id] ?? `ID ${item.plant_id}`}
           </Text>
-          <Text className="text-gray-600">Due: {format(parseISO(item.next_due), 'PPP')}</Text>
+          <Text className="text-gray-600">Due: {format(parseISO(item.due_at), 'PPP')}</Text>
         </View>
       )}
     />
