@@ -90,7 +90,6 @@ const PlantDetailScreen = () => {
           </View>
           {/* Type */}
           <View>
-            {' '}
             <Text className="text-sm font-semibold text-gray-400">Type</Text>
             <Text className="mt-1 text-xl font-bold text-text-green">{plant.nickname}</Text>
           </View>
@@ -102,7 +101,7 @@ const PlantDetailScreen = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('EditScheduleScreen', { plantId: plant.id })}
           className="mr-2 aspect-square h-[64px] items-center justify-center rounded-2xl bg-primary">
-          <FontAwesome6 name="add" size={24} color="#ffffff" />{' '}
+          <FontAwesome6 name="add" size={24} color="#ffffff" />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('UpcomingTasksScreen', { plantId: plant.id })}
