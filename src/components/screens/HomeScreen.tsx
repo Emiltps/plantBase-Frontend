@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getAllPlants } from '../../../api/plants';
 import PlantPreviewCard from '../PlantPreviewCard';
 import { useNavigation } from '@react-navigation/native';
 import getUserPlants from '../../../api/MyPlantsApi';
 import { supabase } from '../../../api/supabaseClient';
 import { format } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 
 type Plant = {
   plant_id: number;
@@ -52,25 +52,25 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-lime-50">
-      <View className="px-4 py-6">
-        <Text className="mb-2 text-xl font-semibold">Welcome back, {firstName || 'there'}! 🌿</Text>
-        <Text className="mt-1 text-gray-600">{todayFormatted}</Text>
-        <Text className="text-md text-gray-600">
-          You have {plants.length} plant{plants.length === 1 ? '' : 's'}
-        </Text>
+    <SafeAreaView className="flex-1 bg-bg">
+      <View className="m-4 rounded-[25px] bg-green-bg px-4 py-10">
+        <Text className="mb-2 text-center text-4xl font-bold text-primary">Hi, {firstName}!</Text>
+        <Text className="text-center text-xl font-semibold text-text-main">{todayFormatted}</Text>
       </View>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('AddPlant')}
-        className="mb-5 mr-4 self-end rounded bg-lime-200 px-4 py-2">
-        <Text className="text-lg font-semibold text-green-800">＋ Add</Text>
-      </TouchableOpacity>
+      <View className="mb-4 flex-row items-center justify-between px-4">
+        <Text className="ml-2 text-2xl font-semibold text-text-main">Your Plants</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AddPlant')}
+          className="flex-row items-center rounded-3xl bg-primary px-10 py-4">
+          <Ionicons name="add-outline" size={20} color="#ffffffff" />
+          <Text className="ml-2 text-xl font-semibold text-white">Add</Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={plants}
         keyExtractor={(item) => item.plant_id.toString()}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 100 }}
         renderItem={({ item }) => <PlantPreviewCard plant={item} />}
       />
     </SafeAreaView>
