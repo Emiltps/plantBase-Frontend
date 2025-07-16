@@ -6,6 +6,7 @@ import AddPlantScreen from '../screens/AddPlantScreen';
 import PlantDetailScreen from '../screens/PlantDetailScreen';
 import EditTaskScreen from '../screens/EditTaskScreen';
 import UpcomingTasksScreen from '../screens/UpcomingTasksScreen';
+import EditPlantScreen from '../screens/EditPlantScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function HomeStackNav() {
       <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       <Stack.Screen name="PlantDetailScreen" component={PlantDetailScreen} />
       <Stack.Screen name="EditScheduleScreen" component={EditTaskScreen} />
+      <Stack.Screen name="EditPlantScreen" component={EditPlantScreen} />
       <Stack.Screen name="UpcomingTasksScreen" component={UpcomingTasksScreen} />
     </Stack.Navigator>
   );

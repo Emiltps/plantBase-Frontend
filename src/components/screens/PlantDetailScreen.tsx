@@ -21,7 +21,7 @@ type PlantType = {
 
 type RootStackParamList = {
   PlantDetailScreen: { plant: PlantType };
-  EditPlant: { plant: PlantType };
+  EditPlantScreen: { plant: PlantType };
   EditScheduleScreen: { plantId?: string };
   UpcomingTasksScreen: { plantId?: string };
 };
@@ -54,7 +54,7 @@ const PlantDetailScreen = () => {
         {/* Image */}
         <View className="relative" style={{ flex: 6.5 }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('EditPlant', { plant })}
+            onPress={() => navigation.navigate('EditPlantScreen', { plant })}
             className="mb-2 w-full flex-row items-center justify-center rounded-2xl bg-white px-3 py-4">
             <FontAwesome6 name="edit" size={20} color="#4b8457" />
             <Text className="ml-2 text-lg font-semibold text-primary">Edit</Text>

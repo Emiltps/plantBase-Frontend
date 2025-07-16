@@ -26,8 +26,19 @@ async function getAuthHeaders() {
   };
 }
 
-async function getUserPlants(userId: any) {
+  export async function getUserPlants(userId: any) {
   const headers = await getAuthHeaders();
   return axios.get<{ plants: Plant[] }>(`${API_BASE}/api/users/${userId}/plants`, { headers });
 }
-export default getUserPlants;
+
+export async function updatePlant(
+  plantId: string,
+  updates: {
+    nickname?: string;
+    notes?: string;
+    status?: string;
+  }
+) {
+  const headers = await getAuthHeaders();
+  return axios.patch<{ plant: Plant }>(`${API_BASE}/api/plants/${plantId}`, updates, { headers });
+}

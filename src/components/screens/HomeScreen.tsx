@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PlantPreviewCard from '../PlantPreviewCard';
 import { useNavigation } from '@react-navigation/native';
-import getUserPlants from '../../../api/MyPlantsApi';
+import { getUserPlants } from '../../../api/MyPlantsApi';
 import { supabase } from '../../../api/supabaseClient';
 import { format } from 'date-fns';
 import { useAuth } from '../../contexts/AuthContext';
