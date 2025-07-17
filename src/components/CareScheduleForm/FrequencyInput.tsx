@@ -8,14 +8,14 @@ type Props = {
 
 export default function FrequencyInput({ frequency, setFrequency }: Props) {
   return (
-    <View className="mb-4">
-      <Text className="mb-1 text-base">Frequency (days)</Text>
+    <View>
+      <Text className="text-md mb-2 ml-3 text-gray-500">Frequency (days)</Text>
       <TextInput
         value={frequency}
         onChangeText={setFrequency}
         keyboardType="numeric"
         placeholder="e.g. 3"
-        className="rounded-lg border border-gray-300 p-2"
+        className="bg-bg-gray-input border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl"
       />
     </View>
   );

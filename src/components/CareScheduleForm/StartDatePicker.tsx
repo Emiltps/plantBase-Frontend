@@ -11,12 +11,12 @@ export default function StartDatePicker({ date, onChange }: Props) {
   const [show, setShow] = useState(false);
 
   return (
-    <View className="mb-4">
-      <Text className="mb-2 text-base font-medium">Start Date</Text>
+    <View>
+      <Text className="text-md mb-2 ml-3 text-gray-500">Start Date</Text>
       <TouchableOpacity
         onPress={() => setShow(true)}
-        className="mb-2 rounded-lg border border-gray-300 bg-gray-100 p-3">
-        <Text className="text-base">{date.toDateString()}</Text>
+        className="bg-bg-gray-input border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl">
+        <Text className="text-xl">{date.toDateString()}</Text>
       </TouchableOpacity>
       {show && (
         <DateTimePicker
