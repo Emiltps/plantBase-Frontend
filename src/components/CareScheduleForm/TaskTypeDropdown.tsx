@@ -26,28 +26,28 @@ const typeStyles: Record<
     bg: 'bg-blue-200',
     color: '#2196F3',
     bgColor: '#BBDEFB',
-    containerBg: '#E3F2FD', // light blue accent
+    containerBg: '#E3F2FD',
   },
   fertilise: {
     icon: 'flower-tulip',
     bg: 'bg-yellow-200',
     color: '#FBC02D',
     bgColor: '#FFF9C4',
-    containerBg: '#FFFDE7', // light yellow accent
+    containerBg: '#FFFDE7',
   },
   prune: {
     icon: 'scissors-cutting',
     bg: 'bg-purple-200',
     color: '#9C27B0',
     bgColor: '#E1BEE7',
-    containerBg: '#F3E5F5', // light purple accent
+    containerBg: '#F3E5F5',
   },
   other: {
     icon: 'help-circle',
     bg: 'bg-gray-200',
     color: '#757575',
     bgColor: '#CFD8DC',
-    containerBg: '#FAFAFA', // light gray accent
+    containerBg: '#FAFAFA',
   },
 };
 
@@ -64,10 +64,12 @@ export default function TaskTypeDropdown({ selectedType, onTypeSelect }: Props) 
               ? { backgroundColor: typeStyles[type.id].containerBg, borderColor: '#fff' }
               : undefined
           }>
-          <View className={`mr-3 rounded-full p-5 ${typeStyles[type.id].bg}`}>
+          <View
+            className="mr-3 rounded-full p-4"
+            style={{ backgroundColor: typeStyles[type.id].bgColor }}>
             <MaterialCommunityIcons
               name={typeStyles[type.id].icon}
-              size={20}
+              size={28}
               color={typeStyles[type.id].color}
             />
           </View>
