@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { useAuth } from '../../src/contexts/AuthContext';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { supabase } from '../../api/supabaseClient';
 import Constants from 'expo-constants';
+import Feather from '@expo/vector-icons/Feather';
 
 import axios from 'axios';
 
@@ -79,16 +81,53 @@ export default function TaskList({ plant_id }: TaskListProps) {
     <FlatList
       data={schedule}
       keyExtractor={(item) => `${item.task_type}-${item.next_due}`}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 128 }}
       renderItem={({ item }) => (
-        <View className="mb-4 rounded-xl bg-lime-100 p-4">
-          <Text className="">
-            {item.task_type.charAt(0).toUpperCase() + item.task_type.slice(1)}
-          </Text>
-          <Text>Next Due: {new Date(item.next_due).toLocaleDateString()}</Text>
-          <Text>
-            Every {item.interval_days} day{item.interval_days !== 1 ? 's' : ''}
-          </Text>
+        <View className="mb-3 flex-row items-center justify-between rounded-3xl border border-gray-200 bg-white p-3">
+          {/* Type icon */}
+          <View
+            className="m-4 mr-6 items-center justify-center rounded-full p-3"
+            style={{
+              backgroundColor:
+                item.task_type.toLowerCase() === 'water'
+                  ? '#BBDEFB'
+                  : item.task_type.toLowerCase() === 'fertilise'
+                    ? '#FFF9C4'
+                    : item.task_type.toLowerCase() === 'prune'
+                      ? '#E1BEE7'
+                      : '#CFD8DC',
+            }}>
+            {item.task_type.toLowerCase() === 'water' && (
+              <MaterialCommunityIcons name="water" size={24} color="#2196F3" />
+            )}
+            {item.task_type.toLowerCase() === 'fertilise' && (
+              <MaterialCommunityIcons name="flower-tulip" size={24} color="#FBC02D" />
+            )}
+            {item.task_type.toLowerCase() === 'prune' && (
+              <MaterialCommunityIcons name="scissors-cutting" size={24} color="#9C27B0" />
+            )}
+          </View>
+          {/* Task info */}
+          <View className="flex-1 pr-2">
+            <Text className="text-xl font-semibold text-text-main">
+              {item.task_type.charAt(0).toUpperCase() + item.task_type.slice(1)}
+            </Text>
+            <Text className="mt-1 text-gray-500">
+              Once every {item.interval_days} day{item.interval_days !== 1 ? 's' : ''}
+            </Text>
+            <Text className="mt-1 text-gray-500">
+              Next due:{' '}
+              {new Date(item.next_due).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </Text>
+          </View>
+          {/* Action button */}
+          <TouchableOpacity className="h-[73px] w-14 items-center justify-center rounded-xl bg-primary">
+            <Feather name="edit" size={24} color="#ffffff" />
+          </TouchableOpacity>
         </View>
       )}
     />
