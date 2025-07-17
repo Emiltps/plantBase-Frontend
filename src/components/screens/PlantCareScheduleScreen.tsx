@@ -6,6 +6,7 @@ import TaskList from '../TaskList';
 import PlantPreviewCard from '../PlantPreviewCard';
 import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 type RouteParams = {
   plantId: number;
@@ -14,6 +15,7 @@ type RouteParams = {
 
 export default function PlantCareScheduleScreen() {
   const route = useRoute();
+  const navigation = useNavigation() as any;
   const { plantId, plantName } = route.params as RouteParams;
   const [plant, setPlant] = useState<Plant | null>(null);
   const [loading, setLoading] = useState(true);
@@ -48,7 +50,10 @@ export default function PlantCareScheduleScreen() {
             )}
         <Text className="mt-6 text-center text-2xl font-bold">Care Schedules</Text>
       </View>
-      <TaskList plant_id={plantId} />
+      <TaskList
+        plant_id={plantId}
+        onPressTask={(schedule) => navigation.navigate('EditScheduleScreen', { schedule })}
+      />
     </View>
   );
 }
