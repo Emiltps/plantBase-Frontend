@@ -6,7 +6,7 @@ import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navig
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Image } from 'react-native';
-import { capitalizeWord } from '~/utils/utils';
+import { capitalizeWord } from '../../utils/utils';
 import { getPlant } from '../../../api/MyPlantsApi';
 import { deletePlant } from '../../../api/MyPlantsApi';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -144,7 +144,10 @@ const PlantDetailScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('PlantCareScheduleScreen', { plantId: plant.plant_id.toString() })
+            navigation.navigate('PlantCareScheduleScreen', {
+              plant_id: plant.plant_id.toString(),
+              plant_name: plant.nickname,
+            })
           }
           className="flex-1 items-center justify-center rounded-2xl bg-primary py-5">
           <Text className="text-lg font-semibold text-white">View Care Schedule</Text>

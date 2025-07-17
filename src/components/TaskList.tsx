@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { useAuth } from '../../src/contexts/AuthContext';
+import { supabase } from '../../api/supabaseClient';
+import Constants from 'expo-constants';
+
 import axios from 'axios';
 
 type CareSchedule = {
@@ -14,6 +18,21 @@ type TaskListProps = {
   plant_id: number;
 };
 
+const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
+
+const api = axios.create({
+  baseURL: API_BASE,
+});
+
+async function getAuthHeaders() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return {
+    Authorization: `Bearer ${session?.access_token}`,
+  };
+}
+
 export default function TaskList({ plant_id }: TaskListProps) {
   const [schedule, setSchedule] = useState<CareSchedule[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,10 +41,9 @@ export default function TaskList({ plant_id }: TaskListProps) {
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
-        const response = await axios.get(
-          `https://plantbase-be.onrender.com/plants/${plant_id}/care_schedules`
-        );
-        setSchedule(response.data);
+        const headers = await getAuthHeaders();
+        const response = await api.get(`/api/plants/${plant_id}/care_schedules`, { headers });
+        setSchedule(response.data.schedules);
       } catch (err: any) {
         setError(err.message || 'Error fetching care schedule');
       } finally {
@@ -64,6 +82,9 @@ export default function TaskList({ plant_id }: TaskListProps) {
       contentContainerStyle={{ padding: 16 }}
       renderItem={({ item }) => (
         <View className="mb-4 rounded-xl bg-lime-100 p-4">
+          <Text className="">
+            {item.task_type.charAt(0).toUpperCase() + item.task_type.slice(1)}
+          </Text>
           <Text>Next Due: {new Date(item.next_due).toLocaleDateString()}</Text>
           <Text>
             Every {item.interval_days} day{item.interval_days !== 1 ? 's' : ''}
