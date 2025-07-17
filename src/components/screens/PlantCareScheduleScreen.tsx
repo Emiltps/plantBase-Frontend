@@ -34,7 +34,7 @@ export default function PlantCareScheduleScreen() {
   }, [plantId]);
 
   return (
-    <View className="bg-bg] flex-1">
+    <View className="flex-1 bg-bg">
       <View className="px-4 py-4">
         {loading
           ? null
