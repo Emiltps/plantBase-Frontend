@@ -107,6 +107,9 @@ export default function TaskList({ plant_id, onPressTask }: TaskListProps) {
             {item.task_type.toLowerCase() === 'prune' && (
               <MaterialCommunityIcons name="scissors-cutting" size={24} color="#9C27B0" />
             )}
+            {item.task_type.toLowerCase() === 'other' && (
+              <MaterialCommunityIcons name="help-circle" size={24} color="#757575" />
+            )}
           </View>
           {/* Task info */}
           <View className="flex-1 pr-2">
