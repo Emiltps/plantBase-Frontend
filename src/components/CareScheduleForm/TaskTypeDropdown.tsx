@@ -1,15 +1,18 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
+export type TaskType = 'water' | 'fertilise' | 'prune' | 'other';
+
 type Props = {
-  selectedType: string;
-  onTypeSelect: (id: string) => void;
+  selectedType: TaskType;
+  onTypeSelect: (id: TaskType) => void;
 };
 
-const taskTypes = [
+const taskTypes: { id: TaskType; name: string }[] = [
   { id: 'water', name: 'Water' },
   { id: 'prune', name: 'Prune' },
-  { id: 'fertilize', name: 'Fertilize' },
+  { id: 'fertilise', name: 'Fertilise' },
+  { id: 'other', name: 'Other' },
 ];
 
 export default function TaskTypeDropdown({ selectedType, onTypeSelect }: Props) {
