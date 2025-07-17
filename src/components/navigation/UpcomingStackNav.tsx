@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import UpcomingTasksScreen from '../screens/UpcomingTasksScreen';
-import EditTaskScreen from '../screens/EditTaskScreen';
+import EditTaskScreen from '../screens/EditScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 

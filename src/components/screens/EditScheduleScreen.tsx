@@ -3,9 +3,9 @@ import { ScrollView, Text, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import PlantTextInput from '../PlantForm/PlantTextInput';
 import PrimaryButton from '../PlantForm/PrimaryButton';
-import TaskTypeDropdown from '../TaskEditorForm/TaskTypeDropdown';
-import FrequencyInput from '../TaskEditorForm/FrequencyInput';
-import StartDatePicker from '../TaskEditorForm/StartDatePicker';
+import TaskTypeDropdown from '../CareScheduleForm/TaskTypeDropdown';
+import FrequencyInput from '../CareScheduleForm/FrequencyInput';
+import StartDatePicker from '../CareScheduleForm/StartDatePicker';
 
 type CareSchedule = {
   plant_id: number;
@@ -15,31 +15,29 @@ type CareSchedule = {
   created_at: string;
 };
 
-export default function EditTaskScreen() {
+export default function EditScheduleScreen() {
   const route = useRoute<any>();
-  const task: CareSchedule = route.params?.task;
+  const schedule: CareSchedule = route.params?.schedule;
 
-  const [taskName, setTaskName] = useState(task.task_type);
-  const [taskType, setTaskType] = useState(task.task_type);
-  const [frequency, setFrequency] = useState(task.interval_days.toString());
-  const [startDate, setStartDate] = useState(new Date(task.next_due));
+  const [taskType, setTaskType] = useState(schedule.task_type);
+  const [frequency, setFrequency] = useState(schedule.interval_days.toString());
+  const [startDate, setStartDate] = useState(new Date(schedule.next_due));
   const [notes, setNotes] = useState('');
 
   const handleSave = () => {
-    if (!taskName || !taskType) {
-      Alert.alert('Missing fields', 'Please fill out task name and type.');
+    if (!taskType || !frequency) {
+      Alert.alert('Missing fields', 'Please fill out all required fields.');
       return;
     }
 
     // TODO: Replace with real backend call
-    Alert.alert('Saved', `Task "${taskName}" updated!`);
+    Alert.alert('Saved', `Schedule updated!`);
   };
 
   return (
     <ScrollView className="flex-1 bg-white p-4">
-      <Text className="mb-4 text-2xl font-bold">Edit Task</Text>
+      <Text className="mb-4 text-2xl font-bold">Edit Schedule</Text>
 
-      <PlantTextInput label="Task Name" value={taskName} onChangeText={setTaskName} />
       <TaskTypeDropdown selectedType={taskType} onTypeSelect={setTaskType} />
       <FrequencyInput frequency={frequency} setFrequency={setFrequency} />
       <StartDatePicker date={startDate} onChange={setStartDate} />

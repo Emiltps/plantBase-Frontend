@@ -18,6 +18,7 @@ type CareSchedule = {
 
 type TaskListProps = {
   plant_id: number;
+  onPressTask?: (schedule: CareSchedule) => void;
 };
 
 const API_BASE = Constants.expoConfig?.extra?.apiBaseUrl;
@@ -35,7 +36,7 @@ async function getAuthHeaders() {
   };
 }
 
-export default function TaskList({ plant_id }: TaskListProps) {
+export default function TaskList({ plant_id, onPressTask }: TaskListProps) {
   const [schedule, setSchedule] = useState<CareSchedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -125,7 +126,9 @@ export default function TaskList({ plant_id }: TaskListProps) {
             </Text>
           </View>
           {/* Action button */}
-          <TouchableOpacity className="h-[73px] w-14 items-center justify-center rounded-xl bg-primary">
+          <TouchableOpacity
+            className="h-[73px] w-14 items-center justify-center rounded-xl bg-primary"
+            onPress={() => onPressTask?.(item)}>
             <Feather name="edit" size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>
