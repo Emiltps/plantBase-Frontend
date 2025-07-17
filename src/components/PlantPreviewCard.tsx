@@ -22,25 +22,38 @@ type RootStackParamList = {
 };
 type Props = {
   plant: PlantType;
+  showArrow?: boolean;
+  pressable?: boolean;
+  imageSizeClass?: string;
 };
 
-export default function PlantPreviewCard({ plant }: Props) {
+export default function PlantPreviewCard({
+  plant,
+  showArrow = true,
+  pressable = true,
+  imageSizeClass = 'h-32 w-32',
+}: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const Container = pressable ? Pressable : View;
   return (
-    <Pressable
-      onPress={() =>
-        navigation.navigate('PlantDetailScreen', {
-          plantId: plant.plant_id.toString(),
-        })
+    <Container
+      onPress={
+        pressable
+          ? () =>
+              navigation.navigate('PlantDetailScreen', {
+                plantId: plant.plant_id.toString(),
+              })
+          : undefined
       }
       className="mb-3 flex-row items-center justify-between rounded-3xl border border-gray-200 bg-white p-3">
       {plant.photo_url ? (
         <Image
           source={{ uri: plant.photo_url }}
-          className="mr-4 h-32 w-32 rounded-xl border border-gray-100 bg-green-100"
+          className={`mr-4 ${imageSizeClass} rounded-xl border border-gray-100 bg-green-100`}
+          resizeMode="cover"
         />
       ) : (
-        <View className="mr-4 h-20 w-20 rounded-md bg-green-100" />
+        <View className={`mr-4 ${imageSizeClass} rounded-md bg-green-100`} />
       )}
 
       <View className="mr-4 flex-1">
@@ -48,9 +61,11 @@ export default function PlantPreviewCard({ plant }: Props) {
         <Text className="text-md text-text-green">{plant.profile_description}</Text>
       </View>
 
-      <View className="h-32 w-16 items-center justify-center rounded-lg bg-light-green-bg">
-        <Ionicons name="chevron-forward" size={24} color="#306739" />
-      </View>
-    </Pressable>
+      {showArrow && (
+        <View className="h-32 w-16 items-center justify-center rounded-lg bg-light-green-bg">
+          <Ionicons name="chevron-forward" size={24} color="#306739" />
+        </View>
+      )}
+    </Container>
   );
 }
