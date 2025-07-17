@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, Alert } from 'react-native';
+import { ScrollView, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import PlantTextInput from '../PlantForm/PlantTextInput';
 import PrimaryButton from '../PlantForm/PrimaryButton';
@@ -43,8 +43,9 @@ export default function EditScheduleScreen() {
         next_due: startDate.toISOString(),
       });
 
-      Alert.alert('Success', 'Schedule updated successfully.');
-      navigation.goBack();
+      Alert.alert('Success', 'Schedule updated successfully.', [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
     } catch (error) {
       console.error('Update failed:', error);
       Alert.alert('Error', 'Failed to update schedule. Please try again.');
@@ -54,19 +55,27 @@ export default function EditScheduleScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      <Text className="mb-4 text-2xl font-bold">Edit Schedule</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+      <ScrollView
+        className="flex-1 bg-white px-4"
+        contentContainerStyle={{ paddingBottom: 132 }}
+        keyboardShouldPersistTaps="handled">
+        <Text className="mb-8 text-center text-2xl font-bold">Edit Schedule</Text>
 
-      <TaskTypeDropdown selectedType={taskType} onTypeSelect={setTaskType} />
-      <FrequencyInput frequency={frequency} setFrequency={setFrequency} />
-      <StartDatePicker date={startDate} onChange={setStartDate} />
-      <PlantTextInput label="Notes" value={notes} onChangeText={setNotes} />
+        <TaskTypeDropdown selectedType={taskType} onTypeSelect={setTaskType} />
+        <FrequencyInput frequency={frequency} setFrequency={setFrequency} />
+        <StartDatePicker date={startDate} onChange={setStartDate} />
+        <PlantTextInput label="Notes" value={notes} onChangeText={setNotes} />
 
-      <PrimaryButton
-        label={loading ? 'Saving...' : 'Save'}
-        onPress={handleSave}
-        disabled={loading}
-      />
-    </ScrollView>
+        <PrimaryButton
+          label={loading ? 'Saving...' : 'Save'}
+          onPress={handleSave}
+          disabled={loading}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
