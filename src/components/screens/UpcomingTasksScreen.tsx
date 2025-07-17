@@ -84,7 +84,7 @@ export default function UpcomingTasksScreen() {
   }
 
   return (
-    <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-white pt-8">
+    <SafeAreaView edges={['top', 'bottom']} className="flex-1 bg-bg pt-8">
       <Text className="mb-8 text-center text-2xl font-bold">Upcoming Tasks</Text>
       <TaskViewSwitcher selected={view} onSelect={setView} />
       <UpcomingTaskList tasks={filteredTasks} view={view} />
