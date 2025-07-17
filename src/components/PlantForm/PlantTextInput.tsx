@@ -13,14 +13,13 @@ export default function PlantTextInput({
   numberOfLines,
   ...textInputProps
 }: Props) {
-  // Dynamic height for multiline input
   const [inputHeight, setInputHeight] = useState(
     multiline && numberOfLines ? numberOfLines * 24 : 0
   );
   return (
     <View>
       <TextInput
-        className="mb-4 rounded-2xl bg-gray-200 px-6 py-6 text-xl"
+        className="bg-bg-gray-input border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl"
         placeholder={label}
         multiline={multiline}
         numberOfLines={numberOfLines}

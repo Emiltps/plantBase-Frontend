@@ -104,7 +104,7 @@ export default function EditPlantScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-4" contentContainerStyle={{ paddingBottom: 132 }}>
+    <ScrollView className="flex-1 bg-white p-5" contentContainerStyle={{ paddingBottom: 132 }}>
       <Text className="mb-4 text-2xl font-bold">Edit Plant</Text>
 
       <PlantTextInput label="Nickname" value={nickname} onChangeText={setNickname} />
@@ -128,7 +128,7 @@ export default function EditPlantScreen() {
         <TouchableOpacity
           onPress={() => setStatus('ALIVE')}
           className={`mr-2 flex-1 items-center rounded-2xl py-6 ${
-            status === 'ALIVE' ? 'bg-green-bg' : 'bg-gray-200'
+            status === 'ALIVE' ? 'bg-green-bg' : 'bg-bg-gray-input border-input-border border'
           }`}>
           <Text
             className={`text-xl ${status === 'ALIVE' ? 'font-medium text-primary' : 'text-text-main'}`}>
@@ -139,7 +139,7 @@ export default function EditPlantScreen() {
         <TouchableOpacity
           onPress={() => setStatus('INFECTED')}
           className={`mr-2 flex-1 items-center rounded-2xl py-6 ${
-            status === 'INFECTED' ? 'bg-orange-200' : 'bg-gray-200'
+            status === 'INFECTED' ? 'bg-orange-200' : 'bg-bg-gray-input border-input-border border'
           }`}>
           <Text
             className={`text-xl ${status === 'INFECTED' ? 'font-medium text-orange-900' : 'text-text-main'}`}>
@@ -150,7 +150,7 @@ export default function EditPlantScreen() {
         <TouchableOpacity
           onPress={() => setStatus('DEAD')}
           className={`flex-1 items-center rounded-2xl py-6 ${
-            status === 'DEAD' ? 'bg-black' : 'bg-gray-200'
+            status === 'DEAD' ? 'bg-black' : 'bg-bg-gray-input border-input-border border'
           }`}>
           <Text
             className={`text-xl ${status === 'DEAD' ? 'font-medium text-white' : 'text-text-main'}`}>
@@ -175,7 +175,7 @@ export default function EditPlantScreen() {
         <View className="mt-2 flex-row">
           <TouchableOpacity
             onPress={handlePickImage}
-            className="flex-1 flex-row items-center justify-center rounded-2xl bg-gray-100 px-6 py-6">
+            className="bg-bg-gray-input flex-1 flex-row items-center justify-center rounded-2xl px-6 py-6">
             <FontAwesome6 name="image" size={20} color="gray" />
             <Text className="ml-3 text-xl text-gray-600">Change Image</Text>
           </TouchableOpacity>
