@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import AddPlantScreen from '../screens/AddPlantScreen';
 import PlantDetailScreen from '../screens/PlantDetailScreen';
-import EditTaskScreen from '../screens/EditTaskScreen';
+import EditScheduleScreen from '../screens/EditScheduleScreen';
 import EditPlantScreen from '../screens/EditPlantScreen';
 import PlantCareScheduleScreen from '../screens/PlantCareScheduleScreen';
 
@@ -34,7 +34,7 @@ export default function HomeStackNav() {
       />
       <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       <Stack.Screen name="PlantDetailScreen" component={PlantDetailScreen} />
-      <Stack.Screen name="EditScheduleScreen" component={EditTaskScreen} />
+      <Stack.Screen name="EditScheduleScreen" component={EditScheduleScreen} />
       <Stack.Screen name="EditPlantScreen" component={EditPlantScreen} />
       <Stack.Screen name="PlantCareScheduleScreen" component={PlantCareScheduleScreen} />
     </Stack.Navigator>
