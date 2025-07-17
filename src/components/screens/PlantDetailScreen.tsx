@@ -25,12 +25,11 @@ type PlantType = {
   created_at: string;
   died_at?: string | null;
 };
-
 type RootStackParamList = {
   PlantDetailScreen: { plantId: string };
   EditPlantScreen: { plantId: string };
   EditScheduleScreen: { plantId?: string };
-  UpcomingTasksScreen: { plantId?: string };
+  PlantCareScheduleScreen: { plantId?: string };
 };
 
 type PlantDetailScreenRouteProp = RouteProp<RootStackParamList, 'PlantDetailScreen'>;
@@ -145,7 +144,7 @@ const PlantDetailScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('UpcomingTasksScreen', { plantId: plant.plant_id.toString() })
+            navigation.navigate('PlantCareScheduleScreen', { plantId: plant.plant_id.toString() })
           }
           className="flex-1 items-center justify-center rounded-2xl bg-primary py-5">
           <Text className="text-lg font-semibold text-white">View Care Schedule</Text>
