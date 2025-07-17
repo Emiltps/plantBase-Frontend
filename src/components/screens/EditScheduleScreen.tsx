@@ -1,37 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, Alert } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import PlantTextInput from '../PlantForm/PlantTextInput';
 import PrimaryButton from '../PlantForm/PrimaryButton';
-import TaskTypeDropdown from '../CareScheduleForm/TaskTypeDropdown';
+import TaskTypeDropdown, { TaskType } from '../CareScheduleForm/TaskTypeDropdown';
 import FrequencyInput from '../CareScheduleForm/FrequencyInput';
 import StartDatePicker from '../CareScheduleForm/StartDatePicker';
+import { updateSchedule } from 'api/myCareSchedules';
 
 type CareSchedule = {
+  care_schedule_id: number;
   plant_id: number;
-  task_type: string;
+  task_type: TaskType;
   interval_days: number;
   next_due: string;
-  created_at: string;
+  created_at?: string;
 };
 
 export default function EditScheduleScreen() {
   const route = useRoute<any>();
+  const navigation = useNavigation();
   const schedule: CareSchedule = route.params?.schedule;
 
-  const [taskType, setTaskType] = useState(schedule.task_type);
+  const [taskType, setTaskType] = useState<TaskType>(schedule.task_type);
   const [frequency, setFrequency] = useState(schedule.interval_days.toString());
   const [startDate, setStartDate] = useState(new Date(schedule.next_due));
   const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!taskType || !frequency) {
       Alert.alert('Missing fields', 'Please fill out all required fields.');
       return;
     }
 
-    // TODO: Replace with real backend call
-    Alert.alert('Saved', `Schedule updated!`);
+    setLoading(true);
+
+    try {
+      await updateSchedule(schedule.care_schedule_id, {
+        task_type: taskType,
+        interval_days: parseInt(frequency, 10),
+        next_due: startDate.toISOString(),
+      });
+
+      Alert.alert('Success', 'Schedule updated successfully.');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Update failed:', error);
+      Alert.alert('Error', 'Failed to update schedule. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,7 +62,11 @@ export default function EditScheduleScreen() {
       <StartDatePicker date={startDate} onChange={setStartDate} />
       <PlantTextInput label="Notes" value={notes} onChangeText={setNotes} />
 
-      <PrimaryButton label="Save" onPress={handleSave} />
+      <PrimaryButton
+        label={loading ? 'Saving...' : 'Save'}
+        onPress={handleSave}
+        disabled={loading}
+      />
     </ScrollView>
   );
 }
