@@ -14,6 +14,8 @@ module.exports = {
         'light-green-bg': '#e9f4ee',
         'red-light': '#ffe8e9',
         'red-main': '#b01d3e',
+        'bg-gray-input': '#f5f5f2',
+        'input-border': '#ebebeb',
       },
     },
   },
