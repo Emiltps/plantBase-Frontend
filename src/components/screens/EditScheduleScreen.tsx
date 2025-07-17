@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  ScrollView,
+  Text,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import PlantTextInput from '../PlantForm/PlantTextInput';
 import PrimaryButton from '../PlantForm/PrimaryButton';
 import TaskTypeDropdown, { TaskType } from '../CareScheduleForm/TaskTypeDropdown';
 import FrequencyInput from '../CareScheduleForm/FrequencyInput';
 import StartDatePicker from '../CareScheduleForm/StartDatePicker';
-import { updateSchedule } from 'api/myCareSchedules';
+import { updateSchedule, deleteSchedule } from 'api/myCareSchedules';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 type CareSchedule = {
   care_schedule_id: number;
@@ -54,6 +63,30 @@ export default function EditScheduleScreen() {
     }
   };
 
+  const handleDelete = async () => {
+    Alert.alert('Confirm Delete', 'Are you sure you want to delete this schedule?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setLoading(true);
+            await deleteSchedule(schedule.care_schedule_id);
+            Alert.alert('Deleted', 'Schedule deleted successfully.', [
+              { text: 'OK', onPress: () => navigation.goBack() },
+            ]);
+          } catch (error) {
+            console.error('Delete failed:', error);
+            Alert.alert('Error', 'Failed to delete schedule. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -75,6 +108,13 @@ export default function EditScheduleScreen() {
           onPress={handleSave}
           disabled={loading}
         />
+        <TouchableOpacity
+          onPress={handleDelete}
+          className="flex-row items-center justify-center rounded-2xl bg-red-light px-4 py-4 py-6"
+          disabled={loading}>
+          <MaterialIcons name="delete-outline" size={24} color="#b01d3e" />
+          <Text className="ml-2 text-lg font-bold text-red-main">Delete Schedule</Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
