@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export type TaskType = 'water' | 'fertilise' | 'prune' | 'other';
 
@@ -15,18 +16,62 @@ const taskTypes: { id: TaskType; name: string }[] = [
   { id: 'other', name: 'Other' },
 ];
 
+type IconName = keyof typeof MaterialCommunityIcons.glyphMap;
+const typeStyles: Record<
+  TaskType,
+  { icon: IconName; bg: string; color: string; bgColor: string; containerBg: string }
+> = {
+  water: {
+    icon: 'water',
+    bg: 'bg-blue-200',
+    color: '#2196F3',
+    bgColor: '#BBDEFB',
+    containerBg: '#E3F2FD', // light blue accent
+  },
+  fertilise: {
+    icon: 'flower-tulip',
+    bg: 'bg-yellow-200',
+    color: '#FBC02D',
+    bgColor: '#FFF9C4',
+    containerBg: '#FFFDE7', // light yellow accent
+  },
+  prune: {
+    icon: 'scissors-cutting',
+    bg: 'bg-purple-200',
+    color: '#9C27B0',
+    bgColor: '#E1BEE7',
+    containerBg: '#F3E5F5', // light purple accent
+  },
+  other: {
+    icon: 'help-circle',
+    bg: 'bg-gray-200',
+    color: '#757575',
+    bgColor: '#CFD8DC',
+    containerBg: '#FAFAFA', // light gray accent
+  },
+};
+
 export default function TaskTypeDropdown({ selectedType, onTypeSelect }: Props) {
   return (
-    <View className="mb-4">
-      <Text className="mb-1 text-base">Task Type</Text>
+    <View className="mb-4 flex-row flex-wrap justify-between">
       {taskTypes.map((type) => (
         <TouchableOpacity
           key={type.id}
           onPress={() => onTypeSelect(type.id)}
-          className={`mb-1 rounded border p-2 ${
-            selectedType === type.id ? 'bg-green-200' : 'bg-white'
-          }`}>
-          <Text>{type.name}</Text>
+          className="border-input-border mb-2 w-[49%] flex-row items-center rounded-full border p-2"
+          style={
+            selectedType === type.id
+              ? { backgroundColor: typeStyles[type.id].containerBg, borderColor: '#fff' }
+              : undefined
+          }>
+          <View className={`mr-3 rounded-full p-5 ${typeStyles[type.id].bg}`}>
+            <MaterialCommunityIcons
+              name={typeStyles[type.id].icon}
+              size={20}
+              color={typeStyles[type.id].color}
+            />
+          </View>
+          <Text className="text-base">{type.name}</Text>
         </TouchableOpacity>
       ))}
     </View>
