@@ -54,7 +54,7 @@ export default function UpcomingTaskList({ tasks, view }: Props) {
               : `Due in ${Math.floor(days / 7)} Week${Math.floor(days / 7) > 1 ? 's' : ''}`;
 
         return (
-          <View className="mb-3 mt-2 flex-row items-center justify-between rounded-3xl border border-gray-200 bg-white p-3">
+          <View className="mb-1 mt-2 flex-row items-center justify-between rounded-3xl border border-gray-200 bg-white p-3">
             {item.photo_url ? (
               <Image
                 source={{ uri: item.photo_url }}
