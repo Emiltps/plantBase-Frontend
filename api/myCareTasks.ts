@@ -33,3 +33,12 @@ export const completeTask = async (careTaskId: number): Promise<void> => {
     { headers }
   );
 };
+
+export const uncompleteTask = async (careTaskId: number): Promise<void> => {
+  const headers = await getAuthHeaders();
+  await axios.patch(
+    `${API_BASE}/api/care_tasks/${careTaskId}/complete`,
+    { completed_at: null },
+    { headers }
+  );
+};

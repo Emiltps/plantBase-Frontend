@@ -3,7 +3,7 @@ import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-nati
 import { parseISO, format } from 'date-fns';
 import { differenceInDays } from 'date-fns';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { completeTask } from '../../api/myCareTasks';
+import { completeTask, uncompleteTask } from '../../api/myCareTasks';
 
 export type CareTask = {
   care_tasks_id: number;
@@ -77,22 +77,33 @@ export default function UpcomingTaskList({ tasks, view }: Props) {
                 item.completed_at ? 'bg-primary' : 'bg-gray-200'
               }`}
               onPress={async () => {
-                const prev = localTasks;
-                if (view === 'today') {
-                  const updated = prev.map((t) =>
+                const prev = [...localTasks];
+                const isCompleted = Boolean(item.completed_at);
+                let updated: CareTask[];
+                if (isCompleted) {
+                  updated = prev.map((t) =>
+                    t.care_tasks_id === item.care_tasks_id ? { ...t, completed_at: null } : t
+                  );
+                } else {
+                  updated = prev.map((t) =>
                     t.care_tasks_id === item.care_tasks_id
                       ? { ...t, completed_at: new Date().toISOString() }
                       : t
                   );
-                  setLocalTasks(updated);
-                } else {
-                  setLocalTasks(prev.filter((t) => t.care_tasks_id !== item.care_tasks_id));
                 }
+                setLocalTasks(updated);
                 try {
-                  await completeTask(item.care_tasks_id);
+                  if (isCompleted) {
+                    await uncompleteTask(item.care_tasks_id);
+                  } else {
+                    await completeTask(item.care_tasks_id);
+                  }
                 } catch (e: any) {
                   setLocalTasks(prev);
-                  Alert.alert('Error', 'Could not mark task complete');
+                  Alert.alert(
+                    'Error',
+                    isCompleted ? 'Could not un-complete task' : 'Could not complete task'
+                  );
                 }
               }}>
               <FontAwesome5
