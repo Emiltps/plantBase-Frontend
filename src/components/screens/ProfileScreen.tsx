@@ -95,7 +95,7 @@ export default function ProfileScreen() {
             value={fullName}
             onChangeText={setFullName}
             placeholder="Enter your full name"
-            className="mb-4 rounded-2xl bg-bg px-6 py-6 text-xl"
+            className="bg-bg-gray-input border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl"
           />
 
           {/* Username */}
@@ -104,7 +104,7 @@ export default function ProfileScreen() {
             value={username}
             editable={false}
             placeholder="Choose a username"
-            className="mb-4 rounded-2xl bg-gray-200 px-6 py-6 text-xl"
+            className="bg-input-border border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl"
           />
 
           <Text className="text-md mb-2 ml-3 text-gray-500">Email Address</Text>
@@ -114,7 +114,7 @@ export default function ProfileScreen() {
             placeholder="Enter your email"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="mb-4 rounded-2xl bg-bg px-6 py-6 text-xl"
+            className="bg-bg-gray-input border-input-border mb-4 rounded-2xl border px-6 py-6 text-xl"
           />
 
           <TouchableOpacity
