@@ -7,6 +7,7 @@ import PlantDetailScreen from '../screens/PlantDetailScreen';
 import EditScheduleScreen from '../screens/EditScheduleScreen';
 import EditPlantScreen from '../screens/EditPlantScreen';
 import PlantCareScheduleScreen from '../screens/PlantCareScheduleScreen';
+import AddCareScheduleScreen from '../screens/AddCareScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function HomeStackNav() {
       />
       <Stack.Screen name="AddPlant" component={AddPlantScreen} />
       <Stack.Screen name="PlantDetailScreen" component={PlantDetailScreen} />
+      <Stack.Screen name="AddCareScheduleScreen" component={AddCareScheduleScreen} />
       <Stack.Screen name="EditScheduleScreen" component={EditScheduleScreen} />
       <Stack.Screen name="EditPlantScreen" component={EditPlantScreen} />
       <Stack.Screen name="PlantCareScheduleScreen" component={PlantCareScheduleScreen} />

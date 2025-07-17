@@ -30,6 +30,7 @@ type RootStackParamList = {
   EditPlantScreen: { plantId: string };
   EditScheduleScreen: { plantId?: string };
   PlantCareScheduleScreen: { plantId?: string; plantName: string };
+  AddCareScheduleScreen: { plantId: string };
 };
 
 type PlantDetailScreenRouteProp = RouteProp<RootStackParamList, 'PlantDetailScreen'>;
@@ -137,7 +138,7 @@ const PlantDetailScreen = () => {
       <View className="mt-6 flex-row px-4">
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('EditScheduleScreen', { plantId: plant.plant_id.toString() })
+            navigation.navigate('AddCareScheduleScreen', { plantId: plant.plant_id.toString() })
           }
           className="mr-2 aspect-square h-[64px] items-center justify-center rounded-2xl bg-primary">
           <FontAwesome6 name="add" size={24} color="#ffffff" />
