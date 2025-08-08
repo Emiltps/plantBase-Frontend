@@ -5,6 +5,7 @@ This is the **PlantBase** mobile frontend application built with Expo and React 
 ## Table of Contents
 
 - [Features](#features)
+- [App Preview](#app-preview)
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
@@ -21,6 +22,10 @@ This is the **PlantBase** mobile frontend application built with Expo and React 
 - Mark tasks complete / uncomplete
 - Profile management with image upload
 - Responsive UI with dynamic lists and modal pickers
+
+## App Preview
+
+![app preview](https://ra.thesungod.xyz/Upd12DQw.png 'Screenshots')
 
 ## Tech Stack
 
